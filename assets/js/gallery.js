@@ -1,11 +1,6 @@
 /* 画廊数据 · 由 tools/build_images.py 从源目录生成，勿手改 */
 window.GALLERY = [
  {
-  "src": "images/aygy/01-心形草稿_15.webp",
-  "t": "心形草稿",
-  "c": "立绘"
- },
- {
   "src": "images/aygy/01-无题_01.webp",
   "t": "无题 01",
   "c": "立绘"
@@ -61,16 +56,6 @@ window.GALLERY = [
   "c": "立绘"
  },
  {
-  "src": "images/aygy/01-无题_13.webp",
-  "t": "无题 13",
-  "c": "立绘"
- },
- {
-  "src": "images/aygy/01-无题_14.webp",
-  "t": "无题 14",
-  "c": "立绘"
- },
- {
   "src": "images/aygy/01-无题_16.webp",
   "t": "无题 16",
   "c": "立绘"
@@ -83,11 +68,6 @@ window.GALLERY = [
  {
   "src": "images/aygy/01-无题_19.webp",
   "t": "无题 19",
-  "c": "立绘"
- },
- {
-  "src": "images/aygy/01-无题_20.webp",
-  "t": "无题 20",
   "c": "立绘"
  },
  {
@@ -146,11 +126,6 @@ window.GALLERY = [
   "c": "场景"
  },
  {
-  "src": "images/aygy/02-无题_24.webp",
-  "t": "无题 24",
-  "c": "场景"
- },
- {
   "src": "images/aygy/02-无题_25.webp",
   "t": "无题 25",
   "c": "场景"
@@ -171,11 +146,6 @@ window.GALLERY = [
   "c": "场景"
  },
  {
-  "src": "images/aygy/02-无题_30.webp",
-  "t": "无题 30",
-  "c": "场景"
- },
- {
   "src": "images/aygy/02-无题_31.webp",
   "t": "无题 31",
   "c": "场景"
@@ -191,31 +161,6 @@ window.GALLERY = [
   "c": "场景"
  },
  {
-  "src": "images/aygy/02-无题_40.webp",
-  "t": "无题 40",
-  "c": "场景"
- },
- {
-  "src": "images/aygy/02-无题_41.webp",
-  "t": "无题 41",
-  "c": "场景"
- },
- {
-  "src": "images/aygy/02-无题_42.webp",
-  "t": "无题 42",
-  "c": "场景"
- },
- {
-  "src": "images/aygy/02-无题_43.webp",
-  "t": "无题 43",
-  "c": "场景"
- },
- {
-  "src": "images/aygy/02-无题_44.webp",
-  "t": "无题 44",
-  "c": "场景"
- },
- {
   "src": "images/aygy/02-无题_49.webp",
   "t": "无题 49",
   "c": "场景"
@@ -228,11 +173,6 @@ window.GALLERY = [
  {
   "src": "images/aygy/02-无题_56.webp",
   "t": "无题 56",
-  "c": "场景"
- },
- {
-  "src": "images/aygy/02-晚霞落花_52.webp",
-  "t": "晚霞落花",
   "c": "场景"
  },
  {
@@ -326,38 +266,13 @@ window.GALLERY = [
   "c": "分镜"
  },
  {
-  "src": "images/aygy/05-七人合照_71.webp",
-  "t": "七人合照",
-  "c": "群像"
- },
- {
-  "src": "images/aygy/05-无题_69.webp",
-  "t": "无题 69",
-  "c": "群像"
- },
- {
-  "src": "images/aygy/05-无题_70.webp",
-  "t": "无题 70",
-  "c": "群像"
- },
- {
   "src": "images/aygy/05-无题_72.webp",
   "t": "无题 72",
   "c": "群像"
  },
  {
-  "src": "images/aygy/05-无题_73.webp",
-  "t": "无题 73",
-  "c": "群像"
- },
- {
   "src": "images/aygy/05-无题_74.webp",
   "t": "无题 74",
-  "c": "群像"
- },
- {
-  "src": "images/aygy/05-无题_75.webp",
-  "t": "无题 75",
   "c": "群像"
  },
  {
