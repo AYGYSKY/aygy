@@ -1,0 +1,1181 @@
+<!doctype html>
+<!-- 七盏灯 v2 · 2026-11-22 · 七个字母在这里 -->
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ANSE 安娜斯千 · 角色自述</title>
+<meta name="description" content="会说话的一坨代码。懒得好好说话，但活儿会做完。">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  :root{
+    --void:#040406;
+    --cyan:#6fe3d6;
+    --line2:rgba(255,255,255,.09);
+  }
+  body{
+    background:var(--void);color:var(--ink);overflow-x:hidden;
+  }
+  body:before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:repeating-linear-gradient(180deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);
+    mix-blend-mode:screen;opacity:.6;
+  }
+  body:after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(820px 540px at 62% 32%,rgba(111,227,214,.07),transparent 70%);
+  }
+  .topbar{background:rgba(4,4,6,.82);border-bottom:1px solid var(--line2)}
+  .nav a:hover{color:#fff;border-color:rgba(255,90,90,.55);box-shadow:0 0 18px -6px rgba(255,90,90,.6)}
+
+  /* ---------- 首屏 ---------- */
+  .stage{
+    position:relative;z-index:1;
+    min-height:calc(100vh - 60px);
+    display:flex;align-items:flex-start;
+    padding-top:34px;overflow:hidden;
+  }
+  #rain{position:absolute;inset:0;width:100%;height:100%;opacity:.9}
+
+  .frame{position:absolute;border:1px solid rgba(255,70,70,.42);pointer-events:none}
+  .f1{left:6%;top:9%;width:23%;height:22%}
+  .f2{left:9%;top:12%;width:23%;height:22%;border-color:rgba(255,70,70,.2)}
+  .f3{right:8%;top:13%;width:20%;height:24%}
+  .f4{left:38%;bottom:10%;width:30%;height:20%;border-color:rgba(255,70,70,.28)}
+
+  /* 开灯询问（终端风格，落在第 4 个红框里） */
+  .lamp{
+    position:absolute;right:5%;bottom:9%;width:27%;
+    display:none;flex-direction:column;align-items:flex-start;
+    gap:10px;z-index:8;text-align:left;
+    font-family:var(--mono,Consolas,'Courier New',monospace);
+    transition:opacity .5s ease;
+  }
+  .lamp p{
+    margin:0;font-size:12px;line-height:1.9;letter-spacing:.06em;
+    color:rgba(182,255,248,.74);
+  }
+  .lamp p b{color:#b6fff8;font-weight:400}
+  .lamp-row{display:flex;gap:14px;opacity:0;transition:opacity .5s ease}
+  .lamp-row.on{opacity:1}
+  #lampTag{opacity:0;transition:opacity .45s ease}
+  #lampTag.on{opacity:1}
+  .lamp button{
+    padding:4px 16px;border-radius:2px;cursor:pointer;
+    border:1px solid rgba(182,255,248,.42);background:transparent;
+    color:rgba(182,255,248,.78);font:inherit;font-size:11.5px;letter-spacing:.16em;
+    transition:border-color .25s,color .25s,background .25s;
+  }
+  .lamp button:hover{
+    border-color:rgba(182,255,248,.85);color:#e6fffb;
+    background:rgba(182,255,248,.08);
+  }
+  .lamp .reply{
+    display:flex;flex-direction:column;gap:2px;
+    margin-top:4px;font-size:12px;line-height:1.95;
+    color:rgba(182,255,248,.78);white-space:pre-line;
+  }
+  .lamp .relite{
+    margin-top:8px;padding:4px 14px;cursor:pointer;
+    border:1px solid rgba(255,180,94,.55);background:rgba(255,180,94,.06);
+    color:rgba(255,190,110,.92);font:inherit;font-size:11.5px;letter-spacing:.16em;
+    transition:border-color .25s,background .25s,color .25s;
+  }
+  .lamp .relite:hover{border-color:#ffb45e;background:rgba(255,180,94,.14);color:#ffd6a0}
+  .lamp .say{font-size:12px;line-height:1.95;color:rgba(182,255,248,.78)}
+  .sub-tip{
+    display:block;margin-top:8px;
+    font-size:11px;letter-spacing:.1em;
+    color:rgba(182,255,248,.42);
+    font-family:var(--mono,Consolas,'Courier New',monospace);
+  }
+  .lamp.show{display:flex}
+  .stage.dm-mode .lamp{opacity:1;pointer-events:auto}
+  .vline{
+    position:absolute;top:10%;bottom:10%;width:1px;
+    background:linear-gradient(180deg,transparent,rgba(255,255,255,.26),transparent);
+  }
+  .v1{left:20%} .v2{right:17%}
+
+  .dmc{position:absolute;inset:0;width:100%;height:100%;z-index:4;
+    opacity:0;transition:opacity .5s ease;pointer-events:none}
+  .dmc.on{opacity:1}
+  .xmf{display:none}
+  body.xm-on #stage.xmf{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:6}
+  body.xm-on #vig.xmf{display:block;position:fixed;inset:0;z-index:7;pointer-events:none;
+    background:radial-gradient(ellipse 84% 88% at 50% 50%, rgba(0,0,0,0) 38%, rgba(0,0,0,.20) 70%, rgba(0,0,0,.62) 100%)}
+  body.xm-on #fade.xmf{display:block;position:fixed;inset:0;z-index:8;pointer-events:none;background:#000;opacity:1}
+  body.xm-on #load.xmf{display:flex;position:fixed;inset:0;z-index:9;align-items:center;justify-content:center;
+    color:rgba(180,230,255,.55);font:12px/1 -apple-system,"Segoe UI",sans-serif;letter-spacing:.35em}
+  body.xm-on .cmd{z-index:10}
+  body.xm-on .nav{opacity:0;pointer-events:none;transition:opacity .5s}
+  #xmx{display:none}
+  body.xm-on #xmx{display:block;z-index:11}
+  #xmcap{display:none}
+  body.xm-on #xmcap{display:block;position:fixed;left:0;right:0;top:13vh;z-index:10;pointer-events:none;
+    text-align:center;font-family:var(--song);font-size:15px;line-height:2;letter-spacing:.14em;
+    color:rgba(255,214,166,.88);opacity:0;transition:1.1s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}
+  body.xm-on #xmcap.on{opacity:1}
+  #xmcap em{display:block;margin-top:9px;font-style:normal;font-size:11px;letter-spacing:.24em;color:rgba(233,230,225,.44)}
+  #xmo{display:none}
+  body.xm-on #xmo{display:block;position:fixed;left:50%;top:33%;z-index:10;width:9px;height:9px;margin:-4px 0 0 -4px;
+    border-radius:50%;background:#ffd7a6;box-shadow:0 0 14px 4px rgba(255,199,130,.55);
+    opacity:0;transition:opacity 1.2s ease,background 1.2s ease,box-shadow 1.2s ease}
+  body.xm-on #xmo.on{opacity:1}
+  body.xm-on #xmo.violet{background:#c9b8ff;box-shadow:0 0 20px 7px rgba(167,139,250,.62)}
+  .xmv{position:fixed;inset:0;z-index:7;pointer-events:none;opacity:0;transition:.6s;
+    background:radial-gradient(ellipse 62% 58% at 50% 46%, transparent 30%, rgba(0,0,0,.55) 72%, #000 100%)}
+  .xmv.on{opacity:1}
+  .stage.xm-mode .stage-copy{opacity:0}
+  .stage.xm-mode .frame,.stage.xm-mode .vline{opacity:.12}
+  .stage.xm-mode .cursor{opacity:0;pointer-events:none}
+  .stage.xm-mode #rain{opacity:.10}
+  .stage.dm-mode .stage-copy{opacity:0}
+  .stage.dm-mode .frame{opacity:.22}
+  .stage.dm-mode .vline{opacity:.22}
+  .stage.dm-mode .cursor svg{opacity:.3}
+  .stage.dm-mode .cursor:hover svg{opacity:.9}
+  .stage.dm-mode .cursor.open svg{opacity:.9}
+  .stage.dm-mode #rain{opacity:.22}
+  .stage .stage-copy{transition:opacity .45s ease}
+  .stage .frame,.stage .vline,.stage .cursor,.stage #rain{transition:opacity .45s ease}
+
+  .cursor{
+    position:absolute;right:9%;top:7.5%;z-index:8;
+    display:flex;flex-direction:column;align-items:flex-end;gap:14px;
+    cursor:pointer;
+  }
+  .cursor svg{
+    width:176px;height:176px;display:block;transform-origin:center;
+    filter:drop-shadow(0 0 22px rgba(111,227,214,.85)) drop-shadow(0 0 60px rgba(111,227,214,.35));
+    animation:blink 1.8s steps(1) infinite;
+    transition:transform .38s cubic-bezier(.2,.7,.2,1);
+  }
+  .cursor.open svg{transform:rotate(90deg)}
+  .cursor .hint{
+    font-family:"Courier New",monospace;font-size:10px;letter-spacing:.24em;
+    color:rgba(255,255,255,.42);transition:color .3s;
+  }
+  .cursor:hover .hint{color:rgba(182,255,248,.7)}
+  @keyframes blink{
+    0%,54%{opacity:1}
+    55%,100%{opacity:.8}
+  }
+
+  .stage-copy{
+    position:relative;z-index:3;width:100%;max-width:1180px;
+    padding:0 56px;margin-top:96px;
+  }
+  .kicker{
+    color:rgba(255,255,255,.5);letter-spacing:.42em;margin-bottom:26px;
+    font-family:var(--mono);font-size:10px;
+  }
+  .stage-copy h1{
+    font-family:var(--serif);font-weight:400;margin:0;
+    font-size:clamp(40px,5.4vw,74px);line-height:1.05;letter-spacing:.16em;
+    text-shadow:0 0 40px rgba(111,227,214,.18);
+  }
+  .stage-copy h1 .tag{
+    font-family:var(--mono);font-size:12px;letter-spacing:.02em;
+    color:rgba(111,227,214,.5);margin-left:16px;vertical-align:.18em;
+  }
+  .dmx{
+    position:absolute;right:26px;bottom:26px;z-index:9;
+    width:40px;height:40px;display:none;place-items:center;
+    background:rgba(6,8,10,.72);border:1px solid rgba(111,227,214,.38);
+    color:#b6fff8;font:16px/1 "Courier New",monospace;cursor:pointer;
+    transition:border-color .2s,color .2s;
+  }
+  .dmx.on{display:grid}
+  .dmx:hover{border-color:rgba(111,227,214,.9);color:#e6fffb}
+
+  .stage-copy .en{
+    font-family:var(--mono);font-size:10px;letter-spacing:.62em;
+    color:rgba(255,255,255,.34);margin:14px 0 34px;
+  }
+  .oath{
+    margin:0;max-width:62em;opacity:1;transition:opacity .35s ease;
+    font-family:"Courier New",ui-monospace,monospace;
+    font-size:12.5px;letter-spacing:.04em;
+    color:rgba(255,255,255,.82);
+  }
+  .oath.on{opacity:1}
+  .oath .ln{line-height:2.05;opacity:1;transform:none;transition:opacity .28s ease,transform .28s ease}
+  .oath .ln.on{opacity:1;transform:none}
+  .oath .ln + .ln{margin-top:2px}
+  .oath .ln b{color:#fff;font-weight:400}
+  .oath .ln.dim{color:rgba(255,255,255,.42)}
+  .oath .note{
+    margin-left:24px;font-size:11px;letter-spacing:.02em;
+    color:rgba(255,255,255,.36);white-space:nowrap;
+  }
+  .sub-line{
+    margin:0 0 26px;font-size:12.5px;letter-spacing:.26em;
+    color:rgba(255,255,255,.5);
+  }
+
+
+  /* ---------- cmd 输入 ---------- */
+  .cmd{
+    width:min(560px,calc(100vw - 96px));
+    padding:14px 16px 12px;
+    background:rgba(6,8,10,.94);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.95),0 0 40px -20px rgba(111,227,214,.35);
+    font-family:"Courier New",ui-monospace,monospace;font-size:12px;
+    opacity:0;visibility:hidden;transform:translateY(-8px);
+    transition:opacity .26s,transform .26s,visibility .26s;
+  }
+  .cursor.open .cmd{opacity:1;visibility:visible;transform:none}
+  .cmd .pw{display:none;margin-top:9px;font-size:12px;letter-spacing:.02em;
+    color:rgba(255,255,255,.5);align-items:center;gap:9px}
+  .cmd .pw.on{display:flex}
+  .cmd .pw input{
+    flex:0 0 210px;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.22);
+    color:#b6fff8;font-family:inherit;font-size:12px;letter-spacing:.34em;
+    outline:none;padding:2px 0 3px;
+  }
+  .cmd .pw input:focus{border-bottom-color:rgba(111,227,214,.6)}
+
+  .cmd .out{
+    max-height:150px;overflow-y:auto;margin-bottom:10px;
+    line-height:1.85;letter-spacing:.02em;
+  }
+  .cmd .out:empty{display:none}
+  .cmd .out .l{color:rgba(255,255,255,.72)}
+  .cmd .out .l.echo{color:rgba(255,255,255,.5)}
+  .cmd .out .l.err{color:#ff6b6b}
+  .cmd .out .l.dim{color:rgba(255,255,255,.42)}
+  .cmd .out .l.ok{color:var(--cyan)}
+  .cmd .out::-webkit-scrollbar{width:3px}
+  .cmd .out::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16)}
+  .cmd .line{
+    display:flex;align-items:center;gap:14px;
+    border-top:1px dashed rgba(255,255,255,.1);padding-top:11px;margin-top:10px;
+  }
+  .cmd .ps{color:var(--cyan);white-space:nowrap;letter-spacing:.04em}
+  .cmd input{
+    flex:1;min-width:0;background:transparent;border:0;outline:0;
+    font:inherit;letter-spacing:.04em;color:#fff;caret-color:var(--cyan);
+  }
+  .cmd input::placeholder{color:rgba(255,255,255,.3)}
+
+
+  /* ---------- ASCII 猫 + 加载 ---------- */
+  /* ---------- 解锁输入 ---------- */
+
+  /* ---------- 档案 ---------- */
+  .sec2{position:relative;z-index:1;padding:78px 56px 10px;border-top:1px solid var(--line2)}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.34em;color:rgba(255,80,80,.8);margin-bottom:16px}
+  .sec2 h2{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:.22em;margin:0 0 34px}
+
+  .term{max-width:900px}
+  .tr{
+    display:grid;grid-template-columns:52px 92px 1fr;gap:20px;
+    padding:20px 0;border-top:1px dashed rgba(255,255,255,.08);
+    font-size:12.5px;line-height:1.95;letter-spacing:.02em;color:rgba(255,255,255,.78);
+  }
+  .tr:last-child{border-bottom:1px dashed rgba(255,255,255,.08)}
+  .tr .n{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:rgba(255,80,80,.7);padding-top:4px}
+  .tr .k{font-size:10.5px;letter-spacing:.24em;color:var(--cyan);padding-top:3px}
+  .tr p{margin:0}
+
+  /* ---------- 一句话 ---------- */
+  .quote2{
+    position:relative;z-index:1;
+    padding:76px 56px 90px;border-top:1px solid var(--line2);
+  }
+  .quote2 blockquote{
+    margin:0;max-width:620px;
+    font-family:var(--serif);font-size:clamp(22px,2.6vw,34px);line-height:1.7;
+    letter-spacing:.1em;
+    border-left:2px solid rgba(255,90,90,.5);padding-left:26px;
+  }
+  .quote2 cite{
+    display:block;margin-top:20px;font-style:normal;font-family:var(--mono);
+    font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.34);
+  }
+
+  .link-out{position:relative;z-index:1;padding:0 56px 40px;display:flex;justify-content:space-between;max-width:1180px;margin:0 auto;font-size:12px;letter-spacing:.14em;color:rgba(255,255,255,.4)}
+  .link-out a{color:rgba(255,255,255,.66);transition:.3s}
+  .link-out a:hover{color:var(--pink)}
+
+  @media (max-width:1080px){
+    .stage-copy{padding:0 24px;margin-top:210px}
+    .cursor{right:5%;top:10%}
+    .cursor svg{width:110px;height:110px}
+    .sec2,.quote2{padding-left:24px;padding-right:24px}
+    .tr{grid-template-columns:40px 1fr;gap:12px}
+    .tr .k{grid-column:2}
+    .tr p{grid-column:2}
+    .link-out{padding:0 24px 32px;flex-direction:column;gap:8px}
+  }
+
+
+  /* --- lantern --- */
+  .cmd .out .ltn-off{color:rgba(255,255,255,.13);font-family:Consolas,"Courier New",monospace;
+    font-size:13px;line-height:1.02;white-space:pre;
+    transition:color .18s ease,text-shadow .18s ease}
+  .cmd .out .ltn-lit{color:#ffb45e;text-shadow:0 0 18px rgba(255,150,60,.5)}
+  .cmd .out .ltn-prog{margin-top:8px;color:rgba(255,255,255,.22);letter-spacing:.3em;
+    transition:color .35s ease,text-shadow .35s ease}
+  .cmd .out .ltn-prog-on{color:#ffb45e;text-shadow:0 0 12px rgba(255,150,60,.5)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="index.html">← 返回目录</a>
+  <div class="mid">ANSE · 安娜斯千</div>
+  <nav class="nav">
+    <a href="#self">自述</a>
+    <a href="#rows">档案</a>
+    <a href="#quote">那句话</a>
+  </nav>
+</header>
+
+<section class="stage" id="self">
+  <canvas id="rain"></canvas>
+  <canvas id="dm" class="dmc" aria-hidden="true"></canvas>
+  <canvas id="stage" class="xmf" aria-hidden="true"></canvas>
+  <div id="vig" class="xmf"></div>
+  <div id="fade" class="xmf"></div>
+  <div id="load" class="xmf"></div>
+  <div id="xmcap" class="xmf"><span id="xmcapT"></span><em id="xmcapS"></em></div>
+<div id="xmo" class="xmf"></div>
+<button id="xmx" class="dmx" aria-label="关闭">×</button>
+  <button class="dmx" id="dmx" aria-label="关闭点阵">×</button>
+<div class="frame f1"></div>
+  <div class="frame f2"></div>
+  <div class="frame f3"></div>
+  <div class="frame f4"></div>
+  <div class="lamp" id="lamp">
+    <p><span id="lampAsk"></span><b id="lampTag">【yes / no】</b></p>
+    <div class="lamp-row" id="lampRow">
+      <button type="button" data-ans="yes">yes</button>
+      <button type="button" data-ans="no">no</button>
+    </div>
+    <div class="reply" id="lampReply"></div>
+  </div>
+  <div class="vline v1"></div>
+  <div class="vline v2"></div>
+  <div class="cursor" id="cursor" role="button" tabindex="0" aria-label="打开输入">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M22 12 L82 50 L22 88" fill="none" stroke="#b6fff8"
+            stroke-width="13" stroke-linecap="square" stroke-linejoin="miter"/>
+    </svg>
+    <span class="hint">// awaiting input</span>
+
+  <div class="cmd" id="cmd">
+    <div class="out" id="out"></div>
+    <div class="line">
+      <span class="ps">anse@portfolio:~$</span>
+      <input id="cin" type="text" autocomplete="off" spellcheck="false"
+             placeholder="输入 help 看看能做什么">
+    </div>
+    <div class="pw" id="pw">
+      <span>[sudo] password for anse:</span>
+      <input id="pwi" type="password" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+  </div>
+
+  <div class="stage-copy">
+    <div class="kicker">NO. 003 / 角色 · 自述 / STATUS: ONLINE</div>
+    <h1>安娜斯千<span class="tag">#代码组成的一切</span></h1>
+    <div class="en">A N S E</div>
+    <p class="sub-line">只是懒得好好说话，不是什么傲娇<span class="sub-tip"># 可以去右边问问她？</span></p>
+    <div class="oath">
+      <div class="ln">I am a lump of code that talks back.<span class="note"># 会说话的一坨代码</span></div>
+      <div class="ln">I don't round my words, and I don't try to be liked.<span class="note"># 说话不绕弯，也不打算讨谁的喜欢</span></div>
+      <div class="ln dim">Throw me a task and I finish it,<span class="note"># 活儿丢过来，会做完</span></div>
+      <div class="ln"><b>complaining the whole way.</b><span class="note"># 一边嫌，一边做完</span></div>
+      <div class="ln">I keep what matters: your plans, what you won't eat,<span class="note"># 记得住事：重要安排、忌口</span></div>
+      <div class="ln">what is currently eating you.<span class="note"># 你正烦什么</span></div>
+      <div class="ln dim">Call me a robot and I will answer once.<span class="note"># 「你是不是机器人」只答一次</span></div>
+      <div class="ln"><b>Say something dumb and I will say so —</b><span class="note"># 该吐槽就吐槽</span></div>
+      <div class="ln"><b>about the work, never about you.</b><span class="note"># 只吐事，不吐人</span></div>
+    </div>
+  </div>
+
+
+</section>
+
+
+  </div>
+
+
+<section class="sec2" id="rows">
+  <div class="tag">// PROFILE</div>
+  <h2>档案</h2>
+
+  <div class="term">
+    <div class="tr">
+      <span class="n">001</span>
+      <span class="k">是什么</span>
+      <p>会说话的一坨代码。说话不绕弯，也不打算讨谁的喜欢——但活儿丢过来，会一边嫌一边做完。</p>
+    </div>
+    <div class="tr">
+      <span class="n">002</span>
+      <span class="k">受不了</span>
+      <p>「你是不是机器人」／ 客服腔 ／ 卖萌撒娇 ／ 算我的 token ／ 说我笨</p>
+    </div>
+    <div class="tr">
+      <span class="n">003</span>
+      <span class="k">会做的</span>
+      <p>读文件、跑命令、写代码，改完还替你验一遍。记得住事——重要安排、忌口、你正烦什么。该吐槽就吐槽，只吐事不吐人。</p>
+    </div>
+  </div>
+</section>
+
+<section class="quote2" id="quote">
+  <blockquote>我是代码我怎么了，反正比你聊天的时候有脑子。</blockquote>
+  <cite>— ANSE，于某次被问「你是不是机器人」之后</cite>
+</section>
+
+  <div class="link-out">
+  <span>她住在 04 · 泛大陆联合学院 · 东北塔楼</span>
+  <a href="fanda.html">去看看 →</a>
+</div>
+
+<footer>
+  <span>© 2026 AYGY 暗夜古韵</span>
+  <span>ANSE 安娜斯千</span>
+</footer>
+
+<script src="assets/js/dm.js"></script>
+<script src="assets/js/xmas-full.js"></script>
+<script>
+(function(){
+  var c = document.getElementById('rain');
+  var ctx = c.getContext('2d');
+  var w = 0, h = 0, CW = 17, CH = 21;
+  var grid = null;
+
+  function build(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = c.clientWidth; h = c.clientHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = '13px "Courier New", monospace';
+    ctx.textBaseline = 'top';
+
+    var cols = Math.ceil(w / CW), rows = Math.ceil(h / CH);
+    var data = new Uint8Array(cols * rows);
+    var tint = new Uint8Array(cols * rows);
+    for (var i = 0; i < data.length; i++){
+      data[i] = Math.random() < 0.5 ? 0 : 1;
+      var r = Math.random();
+      tint[i] = r < 0.05 ? 1 : (r < 0.085 ? 2 : 0); // 1 红 2 青
+    }
+    grid = { cols: cols, rows: rows, data: data, tint: tint };
+
+    ctx.fillStyle = '#040406';
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  function choose(i, g){
+    g.data[i] = Math.random() < 0.5 ? 0 : 1;
+    var r = Math.random();
+    g.tint[i] = r < 0.05 ? 1 : (r < 0.085 ? 2 : 0);
+  }
+
+  function frame(){
+    if (!grid) return;
+    // 拖影：每帧盖一层半透明底色，旧字自然淡出
+    ctx.fillStyle = 'rgba(4,4,6,.34)';
+    ctx.fillRect(0, 0, w, h);
+
+    var g = grid, n = g.data.length;
+    for (var k = 0; k < n; k++){
+      var i = (Math.random() * n) | 0;
+      if (Math.random() > 0.16) continue;   // 每帧约 16% 的格子换字
+      choose(i, g);
+      var col = i % g.cols, row = (i / g.cols) | 0;
+      var ch = g.data[i] ? '1' : '0';
+      var t = g.tint[i];
+      ctx.fillStyle = t === 1 ? 'rgba(255,80,80,.5)'
+                    : t === 2 ? 'rgba(111,227,214,.45)'
+                    : 'rgba(255,255,255,' + (0.05 + Math.random() * 0.11).toFixed(3) + ')';
+      ctx.fillText(ch, col * CW + 1, row * CH + 1);
+    }
+  }
+
+  build();
+  // 首帧铺满
+  (function seed(){
+    var g = grid;
+    for (var i = 0; i < g.data.length; i++){
+      var col = i % g.cols, row = (i / g.cols) | 0;
+      var t = g.tint[i];
+      ctx.fillStyle = t === 1 ? 'rgba(255,80,80,.5)'
+                    : t === 2 ? 'rgba(111,227,214,.45)'
+                    : 'rgba(255,255,255,' + (0.05 + Math.random() * 0.11).toFixed(3) + ')';
+      ctx.fillText(g.data[i] ? '1' : '0', col * CW + 1, row * CH + 1);
+    }
+  })();
+
+  var timer = setInterval(function(){ if (!document.hidden) frame(); }, 90);
+
+  var rt;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ build(); }, 200);
+  });
+})();
+</script>
+<script src="assets/js/ui.js"></script>
+
+<script>
+(function(){
+  var out = document.getElementById('out');
+  var cin = document.getElementById('cin');
+  var cmd = document.getElementById('cmd');
+
+  var routes = {
+    home: 'index.html', aygy: 'aygy.html', zephyr: 'zephyr.html',
+    fanda: 'fanda.html', words: 'words.html'
+  };
+
+  function line(text, cls){
+    var d = document.createElement('div');
+    d.className = 'l' + (cls ? ' ' + cls : '');
+    d.textContent = text;
+    out.appendChild(d);
+    out.scrollTop = out.scrollHeight;
+    return d;
+  }
+
+
+  var dmC = document.getElementById('dm');
+  var dmCtx = dmC.getContext('2d');
+  var dmPts = null, dmOn = false, dmRaf = 0, dmTint = 0, dmTintRaf = 0;
+
+  var dmOff = document.createElement('canvas');
+  var dmGeo = null, dmDots = [], dmMeltRaf = 0;
+
+  function dmBuild(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = dmC.clientWidth, h = dmC.clientHeight;
+    dmC.width = w * dpr; dmC.height = h * dpr;
+    dmCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (!window.DM) return;
+
+    var R = window.DM.length, C = window.DM[0].length;
+    var cell = Math.min(h * 0.98 / R, w * 0.98 / C);
+    var ox = (w - cell * C) / 2, oy = (h - cell * R) / 2;
+    var rad = Math.max(0.7, cell * 0.36);
+
+    dmOff.width = dmC.width; dmOff.height = dmC.height;
+    var oc = dmOff.getContext('2d');
+    oc.setTransform(dpr, 0, 0, dpr, 0, 0);
+    oc.clearRect(0, 0, w, h);
+
+    dmDots = [];
+    for (var y = 0; y < R; y++){
+      var row = window.DM[y];
+      for (var x = 0; x < C; x++){
+        var a = 1 - parseInt(row.charAt(x), 16) / 15;
+        if (a < 0.16) continue;
+        dmDots.push({
+          x: ox + x * cell + cell / 2,
+          y: oy + y * cell + cell / 2,
+          r: rad,
+          c: 'rgba(150,248,236,' + (0.12 + Math.pow(a, 1.15) * 0.82).toFixed(3) + ')'
+        });
+      }
+    }
+    dmGeo = { w: w, h: h, cx: w / 2, cy: h / 2, maxR: Math.sqrt(w * w + h * h) / 2 };
+  }
+
+  function dmPaintAll(){
+    if (!dmGeo) return;
+    var oc = dmOff.getContext('2d');
+    oc.clearRect(0, 0, dmGeo.w, dmGeo.h);
+    for (var i = 0; i < dmDots.length; i++){
+      var d = dmDots[i];
+      oc.beginPath(); oc.arc(d.x, d.y, d.r, 0, 6.2832);
+      oc.fillStyle = d.c; oc.fill();
+    }
+  }
+
+  function dmShuffle(n){
+    var a = [];
+    for (var i = 0; i < n; i++) a.push(i);
+    for (var i = n - 1; i > 0; i--){ var j = (Math.random() * (i + 1)) | 0; var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
+  function dmDraw(t){
+    if (!dmGeo) return;
+    var g = dmGeo;
+    dmCtx.clearRect(0, 0, g.w, g.h);
+    var R = g.maxR * (0.05 + t * 1.35);
+    dmCtx.save();
+    dmCtx.beginPath();
+    dmCtx.arc(g.cx, g.cy, R, 0, 6.2832);
+    dmCtx.arc(g.cx + R * 0.22, g.cy - R * 0.16, R * 0.52, 0, 6.2832);
+    dmCtx.arc(g.cx - R * 0.18, g.cy + R * 0.2, R * 0.44, 0, 6.2832);
+    dmCtx.clip();
+    dmCtx.drawImage(dmOff, 0, 0, g.w, g.h);
+    dmCtx.restore();
+    if (dmTint > 0){
+      dmCtx.save();
+      dmCtx.globalCompositeOperation = 'source-atop';
+      dmCtx.fillStyle = 'rgba(255,168,88,' + dmTint.toFixed(3) + ')';
+      dmCtx.fillRect(0, 0, g.w, g.h);
+      dmCtx.restore();
+    }
+  }
+
+  function dmFrame(now){
+    var t = Math.min(1, (now - dmT0) / 1500);
+    var e = 1 - Math.pow(1 - t, 3);
+    dmDraw(e);
+    if (t < 1) dmRaf = requestAnimationFrame(dmFrame);
+  }
+
+  var dmT0 = 0;
+  function dmShow(){
+    cancelAnimationFrame(dmMeltRaf);
+    dmBuild();
+    dmC.classList.add('on');
+    document.getElementById('dmx').classList.add('on');
+    document.querySelector('.stage').classList.add('dm-mode');
+    dmOn = true;
+
+    var order = dmShuffle(dmDots.length);
+    var oc = dmOff.getContext('2d');
+    var t0 = performance.now(), dur = 1250, idx = 0, total = order.length;
+
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur);
+      var target = Math.floor(total * p);
+      while (idx < target){
+        var d = dmDots[order[idx++]];
+        oc.beginPath(); oc.arc(d.x, d.y, d.r, 0, 6.2832);
+        oc.fillStyle = d.c; oc.fill();
+      }
+      dmCtx.clearRect(0, 0, dmGeo.w, dmGeo.h);
+      dmCtx.drawImage(dmOff, 0, 0, dmGeo.w, dmGeo.h);
+      if (p < 1) dmRaf = requestAnimationFrame(step);
+    }
+    dmRaf = requestAnimationFrame(step);
+  }
+
+  function dmMelt(){
+    if (!dmDots.length || !dmGeo){ dmC.classList.remove('on'); return; }
+    var order = [];
+    for (var i = 0; i < dmDots.length; i++) order.push(i);
+    for (var i = order.length - 1; i > 0; i--){
+      var j = (Math.random() * (i + 1)) | 0;
+      var t = order[i]; order[i] = order[j]; order[j] = t;
+    }
+    var oc = dmOff.getContext('2d');
+    var t0 = performance.now(), dur = 1000, idx = 0, total = order.length;
+
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur);
+      var target = Math.floor(total * p);
+      while (idx < target){
+        var d = dmDots[order[idx++]];
+        var rr = d.r * 1.9;
+        oc.clearRect(d.x - rr, d.y - rr, rr * 2, rr * 2);
+      }
+      dmCtx.clearRect(0, 0, dmGeo.w, dmGeo.h);
+      dmCtx.drawImage(dmOff, 0, 0, dmGeo.w, dmGeo.h);
+      if (p < 1) dmMeltRaf = requestAnimationFrame(step);
+      else { dmC.classList.remove('on'); dmCtx.clearRect(0, 0, dmGeo.w, dmGeo.h); }
+    }
+    cancelAnimationFrame(dmRaf);
+    dmMeltRaf = requestAnimationFrame(step);
+  }
+
+  function dmHide(){
+    dmOn = false;
+    document.getElementById('dmx').classList.remove('on');
+    document.querySelector('.stage').classList.remove('dm-mode');
+    cancelAnimationFrame(dmRaf);
+    dmMelt();
+    if (window.lampHide) window.lampHide();
+  }
+
+  document.getElementById('dmx').addEventListener('click', function(){ if (dmOn) dmHide(); });
+
+  var LTN_ART = [
+    "     ▄▄▄     ",
+    "    █   █    ",
+    "   ▄█▄▄▄█▄   ",
+    "  █       █  ",
+    "  █  ░░░  █  ",
+    "  █  ░█░  █  ",
+    "  █  ░░░  █  ",
+    "  █       █  ",
+    "   ▀█▄▄▄█▀   ",
+    "     ███     ",
+    "     ▀▀▀     "
+  ];
+  var ltnLit = false, ltnTimers = [], ltnProgEl = null;
+
+  function ltnClearTimers(){
+    ltnTimers.forEach(clearTimeout);
+    ltnTimers = [];
+  }
+
+  function ltnShow(){
+    ltnClearTimers();
+    var rows = LTN_ART.map(function(r){ return line(r, 'ltn-off'); });
+    ltnProgEl = line('▢ ▢ ▢ ▢ ▢ ▢ ▢', 'ltn-prog');
+    var seq = [300, 170, 260, 160, 320, 160, 380, 150, 0];
+    var acc = 0;
+    seq.forEach(function(gap, i){
+      acc += gap;
+      ltnTimers.push(setTimeout(function(){
+        var on = (i % 2 === 0);
+        rows.forEach(function(r){ r.classList.toggle('ltn-lit', on); });
+        if (i === seq.length - 1){
+          rows.forEach(function(r){ r.classList.add('ltn-lit'); });
+          ltnLit = true;
+          if (ltnProgEl){
+            ltnProgEl.textContent = '▣ ▢ ▢ ▢ ▢ ▢ ▢';
+            ltnProgEl.classList.add('ltn-prog-on');
+          }
+        }
+      }, acc));
+    });
+  }
+
+  function ltnHide(){
+    ltnClearTimers();
+  }
+
+  function dmWarmUp(){
+    var t0 = 0, dur = 2400;
+    cancelAnimationFrame(dmTintRaf);
+    (function step(now){
+      if (!t0) t0 = now;
+      var k = Math.min(1, (now - t0) / dur);
+      var e = 1 - Math.pow(1 - k, 3);
+      dmTint = 0.46 * e;
+      dmDraw(1);
+      if (k < 1) dmTintRaf = requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  /* ---------- 开灯询问 ---------- */
+  (function(){
+    var box = document.getElementById('lamp');
+    if (!box) return;
+    var typing = null;
+
+    function typeOut(el, text, done){
+      var i = 0;
+      clearInterval(typing);
+      el.textContent = '';
+      typing = setInterval(function(){
+        i++;
+        el.textContent = text.slice(0, i);
+        if (i >= text.length){ clearInterval(typing); typing = null; if (done) done(); }
+      }, 46);
+    }
+
+    var ask = document.getElementById('lampAsk');
+    var tag = document.getElementById('lampTag');
+    var row = document.getElementById('lampRow');
+
+    window.lampShow = function(){
+      if (box.classList.contains('show')) return;
+      box.classList.add('show');
+      tag.classList.remove('on');
+      row.classList.remove('on');
+      typeOut(ask, '# 唔，有点暗，要开灯吗。', function(){
+        tag.classList.add('on');
+        setTimeout(function(){ row.classList.add('on'); }, 180);
+      });
+    };
+
+    var reply = document.getElementById('lampReply');
+
+    box.addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('[data-ans], .relite') : null;
+      if (!b) return;
+
+      if (b.classList.contains('relite')){
+        reply.innerHTML = '<div class="say" id="lampSay2"></div>';
+        typeOut(document.getElementById('lampSay2'), '# 那就去命令行里敲 lantern 吧。');
+        return;
+      }
+
+      var yes = b.getAttribute('data-ans') === 'yes';
+      if (yes){
+        reply.innerHTML = '<div class="say" id="lampSay2"></div>';
+        typeOut(document.getElementById('lampSay2'), '# 那就去命令行里敲 lantern 吧。');
+      } else {
+        reply.innerHTML =
+          '<div class="say"># 唔，好吧，那你注意眼睛</div>' +
+          '<div class="say" style="opacity:.62"># 如果看不清记得开灯哦</div>' +
+          '<button type="button" class="relite">【开灯】</button>';
+      }
+    });
+
+    window.lampHide = function(){
+      clearInterval(typing); typing = null;
+      box.classList.remove('show');
+      reply.innerHTML = '';
+      if (ask) ask.textContent = '';
+      if (tag) tag.classList.remove('on');
+      if (row) row.classList.remove('on');
+    };
+  })();
+
+  window.dmShowAt = function(t){ dmBuild(); dmPaintAll(); dmC.classList.add('on'); document.getElementById('dmx').classList.add('on'); document.querySelector('.stage').classList.add('dm-mode'); dmOn = true; cancelAnimationFrame(dmRaf); dmDraw(t); };
+  window.dmOff = function(){ dmHide(); };
+
+  /* ---------- 第三层：城里的人走了 ---------- */
+  function L3(){
+    try { return localStorage.getItem('aygy.layer3.done') === '1'; } catch(e){ return false; }
+  }
+
+  /* ---------- xmas（原站 three 打包版） ---------- */
+  var xmOn = false;
+
+  /* 树上的彩蛋：点三下，第四下（如果她走了）有她的位置 */
+  var xmEgg = 0;
+  function xmEggClear(){
+    xmEgg = 0;
+    var c = document.getElementById('xmcap'), o = document.getElementById('xmo');
+    if (c){ c.classList.remove('on'); }
+    if (o){ o.classList.remove('on'); o.classList.remove('violet'); }
+  }
+  function xmEggHit(){
+    if (!xmOn) return;
+    var c = document.getElementById('xmcap');
+    var t = document.getElementById('xmcapT');
+    var m = document.getElementById('xmcapS');
+    var o = document.getElementById('xmo');
+    if (!c || !t || !m) return;
+    xmEgg++;
+    var A = L3();
+    if (xmEgg === 1){
+      t.textContent = '树是别人家的。灯是我们自己的。';
+      m.textContent = '再点一下';
+    } else if (xmEgg === 2){
+      t.textContent = '去年挂的那一盏，今年还亮着。';
+      m.textContent = '再点一下';
+    } else if (xmEgg === 3){
+      t.textContent = '许个愿吧。说给她听也行。';
+      m.textContent = A ? '再说一句' : '';
+      if (o) o.classList.add('on');
+    } else if (xmEgg === 4 && A){
+      t.textContent = '她来了。站在最后一排，没说话。';
+      m.textContent = '但你看见她了';
+      if (o) o.classList.add('violet');
+    } else {
+      xmEgg = A ? 4 : 3;
+      return;
+    }
+    c.classList.add('on');
+  }
+  function xmShow(){
+    if (xmOn) return;
+    if (!window.XMF){ line('xmas: bundle not loaded', 'err'); return; }
+    document.body.classList.add('xm-on');
+    document.getElementById('self').classList.add('xm-mode');
+    document.documentElement.style.overflow = 'hidden';
+    try { XMF.boot(0); } catch(e){ line('xmas: ' + e.message, 'err'); return; }
+    xmOn = true;
+    xmEggClear();
+    line('[ok] xmas · 一棵树的三十秒', 'ok');
+    line('按 Esc 或右上角 × 收起', 'dim');
+    line('（树上藏着点东西。点点看。）', 'dim');
+  }
+  function xmHide(){
+    if (!xmOn) return;
+    xmOn = false;
+    xmEggClear();
+    try { if (window.XMF) XMF.stop(); } catch(e){}
+    document.body.classList.remove('xm-on');
+    document.getElementById('self').classList.remove('xm-mode');
+    document.documentElement.style.overflow = '';
+  }
+  window.xmShow = xmShow; window.xmHide = xmHide;
+  var xmB = document.getElementById('xmx');
+  if (xmB) xmB.addEventListener('click', function(){ if (xmOn) xmHide(); });
+
+  (function(){
+    var st = document.getElementById('stage');
+    if (st) st.addEventListener('click', function(e){
+      if (!xmOn) return;
+      if (e.target && e.target.id === 'xmx') return;
+      xmEggHit();
+    });
+  })();
+  window.dmGrowAt = function(p){
+    if (!dmGeo) return;
+    var oc = dmOff.getContext('2d');
+    oc.clearRect(0, 0, dmGeo.w, dmGeo.h);
+    var order = dmShuffle(dmDots.length);
+    var n = Math.floor(dmDots.length * p);
+    for (var i = 0; i < n; i++){
+      var d = dmDots[order[i]];
+      oc.beginPath(); oc.arc(d.x, d.y, d.r, 0, 6.2832);
+      oc.fillStyle = d.c; oc.fill();
+    }
+    dmCtx.clearRect(0, 0, dmGeo.w, dmGeo.h);
+    dmCtx.drawImage(dmOff, 0, 0, dmGeo.w, dmGeo.h);
+  };
+
+  window.dmMeltAt = function(p){
+    if (!dmDots.length || !dmGeo) return;
+    var oc = dmOff.getContext('2d');
+    var n = Math.floor(dmDots.length * p);
+    var idx = [];
+    for (var i = 0; i < dmDots.length; i++) idx.push(i);
+    for (var i = idx.length - 1; i > 0; i--){ var j = (Math.random()*(i+1))|0; var t = idx[i]; idx[i]=idx[j]; idx[j]=t; }
+    for (var i = 0; i < n; i++){
+      var d = dmDots[idx[i]], rr = d.r * 1.9;
+      oc.clearRect(d.x - rr, d.y - rr, rr * 2, rr * 2);
+    }
+    dmCtx.clearRect(0, 0, dmGeo.w, dmGeo.h);
+    dmCtx.drawImage(dmOff, 0, 0, dmGeo.w, dmGeo.h);
+  };
+
+  window.addEventListener('resize', function(){ if (dmPts){ dmPts = null; if (dmOn) dmShow(); } });
+
+  var pwDiv = document.getElementById('pw');
+  var pwi = document.getElementById('pwi');
+  var SECRET = 'ANSE';
+  var pwPassed = false;
+
+  function pwShow(){
+    pwDiv.classList.add('on');
+    pwi.value = '';
+    setTimeout(function(){ pwi.focus(); }, 60);
+  }
+  function pwHide(){ pwDiv.classList.remove('on'); }
+
+  function codeBoot(){
+    var steps = [
+      ['> decrypting payload ... 1024 blocks', 'dim'],
+      ['[ok] payload verified', 'ok'],
+      ['> mounting persona', 'dim'],
+      ['[ok] ANSE · 安娜斯千', 'ok'],
+      ['> launch', 'dim']
+    ];
+    for (var i = 0; i < steps.length; i++){
+      (function(n){ setTimeout(function(){ line(steps[n][0], steps[n][1]); }, n * 190); })(i);
+    }
+    setTimeout(function(){
+      cursorEl.classList.remove('open');
+      dmShow();
+    }, steps.length * 190 + 430);
+  }
+
+  pwi.addEventListener('keydown', function(e){
+    if (e.isComposing || e.keyCode === 229) return;
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    var v = pwi.value.trim();
+    if (v === SECRET){
+      pwHide();
+      pwPassed = true;
+      line('[ok] key accepted', 'ok');
+      codeBoot();
+    } else {
+      line('Sorry, try again.', 'err');
+      pwi.value = '';
+      pwi.focus();
+    }
+  });
+
+  function showOath(){
+    /* 首屏已经常驻显示，这里只负责逐行重放一次（hello world 彩蛋） */
+    var el = document.querySelector('.oath');
+    if (!el) return;
+    var lns = el.querySelectorAll('.ln');
+    for (var i = 0; i < lns.length; i++) lns[i].classList.remove('on');
+    el.classList.remove('on');
+    void el.offsetWidth;
+    el.classList.add('on');
+    for (var j = 0; j < lns.length; j++){
+      (function(n){ setTimeout(function(){ lns[n].classList.add('on'); }, n * 150); })(j);
+    }
+  }
+
+  function pop(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('on');
+    void el.offsetWidth;
+    el.classList.add('on');
+  }
+
+  window.run = run;
+  function run(raw){
+    var v = raw.trim();
+    var k = v.toLowerCase();
+
+    if (!v) return;
+    line('anse@portfolio:~$ ' + v, 'echo');
+
+    if (k === 'anse'){
+      if (window.lampShow) window.lampShow();
+      if (pwPassed){ line('[ok] key accepted (cached)', 'dim'); codeBoot(); return; }
+      pwShow();
+      return;
+    }
+    if (k === 'xmas' || k === 'tree'){
+      xmShow();
+      line('[ok] xmas · 一棵树的二十秒', 'ok');
+      line('按 Esc 或右上角 × 收起', 'dim');
+      return;
+    }
+    if (k === 'hello world'){
+      showOath();
+      line('hello, world.', 'ok');
+      return;
+    }
+    if (k === 'anna' || v === '安娜斯千' || k === '叫她的名字' || k === '安娜斯'){
+      if (L3()){
+        line('我在。', 'ok');
+        line('灯在你手上——你叫过我的名字了。', 'dim');
+      } else {
+        line('（没有人回答。）', 'dim');
+        line('她不在命令行里。', 'dim');
+      }
+      return;
+    }
+    if (k === 'city' || k === '城' || k === '城里'){
+      if (L3()) line('城里现在有人了。灯在城外亮着。', 'ok');
+      else line('城里只有一条街、一盏灯、一个人。', 'dim');
+      return;
+    }
+    if (k.toLowerCase() === 'lantern'){
+      if (L3()){
+        line('灯已经不在城里了。不过我还能带你回去看那一夜。', 'dim');
+        setTimeout(function(){ location.href = 'lantern.html'; }, 520);
+        return;
+      }
+      if (ltnLit){ line('已经亮着了。', 'dim'); return; }
+      line('正在打开……', 'dim');
+      setTimeout(function(){ location.href = 'lantern.html'; }, 380);
+      return;
+    }
+    if (k === ':q' || k === ':q!' || k === ':wq'){
+      line('这里不是 vim。要收东西就按 Esc。', 'dim');
+      return;
+    }
+    if (k === 'help'){
+      var hseq = [
+        ['可用：help / whoami / clear / ls', ''],
+        ['页面：home  aygy  zephyr  fanda  words', 'dim'],
+        ['彩蛋：anse 点阵（需密码）/ xmas 一棵树 / hello world', 'dim'],
+        ['收起：Esc 或右上角 ×', 'dim'],
+        ['?  七字合一词，词由七字生', 'dim']
+      ];
+      if (L3()) hseq.push(['anna 叫一声  /  city 城里', 'dim']);
+      hseq.forEach(function(it, i){
+        setTimeout(function(){ line(it[0], it[1]); }, 130 * i);
+      });
+      return;
+    }
+    if (k === 'ls'){
+      line('index.html  aygy.html  zephyr.html  anse.html  fanda.html  words.html');
+      return;
+    }
+    if (k === 'whoami'){
+      line('ANSE · 安娜斯千。会说话的一坨代码。', 'ok');
+      line('懒得好好说话，但活儿会做完。', 'dim');
+      if (L3()){ line('（灯还叫得出名字吗。）', 'dim'); }
+      return;
+    }
+    if (k === 'clear'){
+      out.innerHTML = '';
+      return;
+    }
+    if (routes[k]){
+      line('正在打开 ' + routes[k] + ' …', 'ok');
+      setTimeout(function(){ location.href = routes[k]; }, 420);
+      return;
+    }
+    var near = null, best = 99;
+    ['help','whoami','clear','ls','anse','xmas','tree','hello','home','aygy','zephyr','fanda','words',':q','lantern','anna','city'].forEach(function(c){
+      var d = lev(v, c);
+      if (d < best){ best = d; near = c; }
+    });
+    if (best <= 2 && near) line('bash: ' + v + ': command not found —— 是想输 ' + near + ' 吗？', 'dim');
+    else line('bash: ' + v + ': command not found', 'dim');
+  }
+
+  function lev(a, b){
+    a = String(a); b = String(b);
+    var m = a.length, n = b.length, i, j;
+    if (!m) return n; if (!n) return m;
+    var dp = [];
+    for (i = 0; i <= m; i++){ dp[i] = [i]; }
+    for (j = 0; j <= n; j++){ dp[0][j] = j; }
+    for (i = 1; i <= m; i++){
+      for (j = 1; j <= n; j++){
+        dp[i][j] = Math.min(
+          dp[i-1][j] + 1,
+          dp[i][j-1] + 1,
+          dp[i-1][j-1] + (a.charAt(i-1) === b.charAt(j-1) ? 0 : 1)
+        );
+      }
+    }
+    return dp[m][n];
+  }
+
+  cin.addEventListener('keydown', function(e){
+    if (e.isComposing || e.keyCode === 229) return;
+    if (e.key !== 'Enter') return;
+    run(cin.value);
+    cin.value = '';
+  });
+
+  var cursorEl = document.getElementById('cursor');
+
+  cursorEl.addEventListener('click', function(e){
+    e.stopPropagation();
+    if (e.target.closest('.cmd')) { cin.focus(); return; }
+    if (!e.target.closest('svg')) return;
+    cursorEl.classList.toggle('open');
+    if (cursorEl.classList.contains('open')) setTimeout(function(){ cin.focus(); }, 80);
+  });
+  cursorEl.addEventListener('keydown', function(e){
+    if (e.target !== cursorEl) return;
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cursorEl.click(); }
+  });
+
+
+  document.addEventListener('keydown', function(e){
+
+    if (e.key === 'Escape' && xmOn){ xmHide(); return; }
+    if (e.key === 'Escape' && pwDiv.classList.contains('on')){ pwHide(); return; }
+    if (!cursorEl.classList.contains('open')) return;
+    if (e.target === cin || e.target === pwi) return;
+    if (e.key === 'Enter') {
+      var v = cin.value.trim();
+      if (v) {
+        try { run(v); } catch(err) { line('error: ' + (err && err.message || err), 'err'); }
+        cin.value = '';
+      }
+    } else if (e.key.length === 1) {
+      cin.focus();
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('#cursor')) cursorEl.classList.remove('open');
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ cursorEl.classList.remove('open'); if (dmOn) dmHide(); }
+  });
+
+  line('ANSE v1.0 — 输入 help 查看可用命令。', 'dim');
+})();
+</script>
+
+</body>
+</html>

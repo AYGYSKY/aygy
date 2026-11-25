@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天穹下的群星 · 四章文本</title>
+<meta name="description" content="《天穹下的群星 The Star Under the Sky》——四章文本：虚幻之境（梦境）、新生、泛大陆学院篇、虚幻之境（现实）结局。">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  :root{ --tq:#8f86c9; }
+
+  body{
+    background-image:
+      linear-gradient(180deg, rgba(143,134,201,0) 0%, rgba(143,134,201,0) 62%,
+        rgba(143,134,201,.07) 86%, rgba(143,134,201,.15) 100%);
+    background-repeat:no-repeat;
+  }
+
+
+  .tqc{padding:56px 56px 8px;max-width:780px}
+  .tqc+.tqc{border-top:1px solid var(--line)}
+  .tqc .idx{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;color:var(--tq);
+    margin:0 0 14px;
+  }
+  .tqc h2{
+    font-size:clamp(22px,2.6vw,30px);font-weight:400;letter-spacing:.16em;
+    margin:0 0 10px;line-height:1.3;
+  }
+  .tqc .en{
+    font-size:10.5px;letter-spacing:.34em;color:var(--ink-3);text-transform:uppercase;
+    margin:0 0 26px;
+  }
+
+  /* 篇目卡：标题行可点，正文默认收起 */
+  .piece{
+    margin:0 0 12px;max-width:100%;
+    border:1px solid var(--line);background:rgba(255,255,255,.014);
+    transition:border-color .35s ease,background .35s ease;
+  }
+  .piece:hover{border-color:rgba(143,134,201,.32);background:rgba(143,134,201,.032)}
+  .piece.on{border-color:rgba(143,134,201,.42);background:rgba(143,134,201,.05)}
+
+  .piece-h{
+    display:flex;align-items:center;gap:16px;width:100%;
+    padding:19px 22px;background:none;border:0;cursor:pointer;
+    font:inherit;color:var(--ink);text-align:left;-webkit-appearance:none;
+  }
+  .piece-h .h-t{font-size:13px;letter-spacing:.22em;color:var(--ink-2);transition:color .35s}
+  .piece.on .piece-h .h-t,.piece-h:hover .h-t{color:var(--ink)}
+  .piece-h .h-n{
+    margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+    color:var(--ink-3);white-space:nowrap;
+  }
+  .piece-h .h-i{
+    flex:none;position:relative;width:22px;height:22px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.18);transition:border-color .35s,transform .45s ease;
+  }
+  .piece-h .h-i:before,.piece-h .h-i:after{
+    content:"";position:absolute;left:50%;top:50%;background:var(--ink-2);
+    transform:translate(-50%,-50%);transition:opacity .35s,background .35s;
+  }
+  .piece-h .h-i:before{width:9px;height:1px}
+  .piece-h .h-i:after{width:1px;height:9px}
+  .piece.on .piece-h .h-i{border-color:rgba(143,134,201,.6);transform:rotate(180deg)}
+  .piece.on .piece-h .h-i:after{opacity:0}
+
+  .piece-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.4,0,.2,1)}
+  .piece.on .piece-b{grid-template-rows:1fr}
+  .piece-b>div{overflow:hidden}
+  .piece-b .in{padding:6px 22px 28px}
+
+  .piece p{margin:0 0 2px;font-size:14px;line-height:2.2;color:var(--ink-2);letter-spacing:.045em}
+  .piece p.gap{margin-bottom:20px}
+  .piece .me{color:rgba(233,230,225,.5)}
+  .piece .me:before{content:"》";color:var(--tq);margin-right:2px}
+  .piece .lbl{color:var(--tq);letter-spacing:.14em;font-size:13px}
+  .piece .verse{
+    font-family:var(--serif);font-size:15px;line-height:2.35;letter-spacing:.12em;
+    color:var(--ink);margin:0 0 2px;
+  }
+  .piece .verse.em{color:#cfc8ee}
+  .piece .hr{
+    width:52px;height:1px;background:rgba(143,134,201,.45);
+    margin:26px 0;border:0;
+  }
+
+  .tn{margin:6px 0 0;font-size:11px;letter-spacing:.1em;color:var(--ink-3);line-height:1.9}
+
+  #about{padding-bottom:76px}
+  #about p{max-width:40em;font-size:13px;line-height:2.05;color:var(--ink-2);margin:0 0 12px}
+  #about b{font-weight:400;color:var(--ink)}
+  .ph{min-height:200px}
+
+  .kv{margin-top:26px;border-top:1px solid var(--line)}
+  .kv div{display:flex;gap:26px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+  .kv span{flex:none;width:96px;color:var(--ink-3);letter-spacing:.14em}
+  .kv b{font-weight:400;color:var(--ink);letter-spacing:.04em}
+
+  @media (max-width:860px){
+    .tqc{padding:44px 26px 6px}
+    .page-head{padding:66px 26px 44px}
+    .piece p{font-size:13.5px;line-height:2.05}
+    .piece-h{padding:16px 18px}
+    .piece-b .in{padding:2px 18px 24px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="index.html">← 返回目录</a>
+  <div class="mid">天穹下的群星</div>
+  <nav class="nav">
+    <a href="#dream">虚幻之境</a>
+    <a href="#newlife">新生</a>
+    <a href="#academy">学院篇</a>
+    <a href="#reality">结局</a>
+    <a href="#about">关于</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="page-head">
+  <p class="kicker" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.34em;color:var(--ink-3);margin:0 0 18px">THE STAR UNDER THE SKY</p>
+  <h1>天穹下的群星</h1>
+</section>
+
+<section class="tqc" id="dream">
+  <p class="idx">01</p>
+  <h2>虚幻之境（梦境）</h2>
+  <p class="en">Prologue · Ethereal Realm</p>
+
+  <article class="piece">
+    <p class="ttl">你说，这一切起源于什么时候呢</p>
+
+    <p>你说，</p>
+    <p>这一切起源于什么时候呢？</p>
+    <p class="gap me">……</p>
+    <p>haisg=hi</p>
+    <p>还是说需要帮你回忆一下呢？</p>
+    <p class="gap me">…………</p>
+    <p>好吧，</p>
+    <p>看来你挺困惑的，</p>
+    <p>那就先帮你回忆一下吧。</p>
+    <p class="gap">呐，先看看这些吧。</p>
+
+    <hr class="hr">
+
+    <p class="verse">《发黄的信封》</p>
+    <p class="verse">《紫罗兰》</p>
+    <p class="verse">《初始》</p>
+    <p class="verse">《悲观的理想主义者》</p>
+    <p class="verse">《28日行》</p>
+
+    <hr class="hr">
+
+    <p class="gap me">…………</p>
+    <p>你已经看完了？</p>
+    <p class="gap">可这里还有一个纸条，你不看看吗？</p>
+    <p class="gap me">……</p>
+
+    <hr class="hr">
+
+    <p class="verse em">也许我们活在游戏里，</p>
+    <p class="verse em">也许这个游戏并不好玩，</p>
+    <p class="verse em">也许只是个普普通通的人而已，</p>
+    <p class="verse em">也许在故事的最后，</p>
+    <p class="verse em">我们会相遇，</p>
+    <p class="verse em">也许吧</p>
+
+    <hr class="hr">
+
+    <p class="gap me">…………这是我写的？</p>
+    <p>不知道啊。</p>
+    <p class="gap">我潜意识里告诉我要给你看这些。</p>
+    <p class="gap me">……那他为什么要写这些？</p>
+    <p>唔？你问写这个的人为什么要写这些？</p>
+    <p>我也不知道啊。</p>
+    <p>可能是他在低谷时写的的一些牢骚。</p>
+    <p>毕竟人生不可能一帆风顺的呀。</p>
+    <p>也有可能是中二病犯了。</p>
+    <p class="gap">毕竟人至死是少年嘛。</p>
+    <p>好了好了，有点偏题了。</p>
+    <p class="gap">回到最开始的问题，现在，你回忆起来了吗？</p>
+    <p>欸，先不着急回答。</p>
+    <p>我先带你去外面看看吧。</p>
+    <p class="gap">来吧，牵着我的手。</p>
+
+    <p class="gap me">（困惑，迟疑）</p>
+    <p class="me">……你为什么认为我失忆了</p>
+    <p class="me">还有，你究竟是谁？</p>
+    <p class="me">我又为什么会出现在这？</p>
+  </article>
+</section>
+
+<section class="tqc" id="newlife">
+  <p class="idx">02</p>
+  <h2>新生</h2>
+  <p class="en">New Life</p>
+
+  <article class="piece">
+    <p class="ttl">初始</p>
+
+    <p class="verse">——繁星——</p>
+    <p class="verse">暗夜古韵</p>
+    <p class="verse">AYGY-SKY</p>
+    <p class="verse">anliegore</p>
+
+    <hr class="hr">
+
+    <p class="verse em">—星途漫漫，你我终将相遇—</p>
+    <p class="verse em">—欢迎回来，暗夜古韵—</p>
+
+    <hr class="hr">
+
+    <p class="verse">——络花——</p>
+    <p class="verse em">|万态·终焉|</p>
+
+    <p class="tn">这些词是那段日子攒下来的：星球的名字、自己的几个名字、还有一句不知道对谁说的欢迎回来。</p>
+  </article>
+</section>
+
+<section class="tqc" id="academy">
+  <p class="idx">03</p>
+  <h2>泛大陆学院篇</h2>
+  <p class="en">The Academy</p>
+
+  <article class="piece">
+    <p class="ttl">28日行</p>
+
+    <p>第 28 天。</p>
+    <p class="gap">古韵离开了驻地，继续向目的地走去。</p>
+    <p>回首第二次的试炼，仍有不足。</p>
+    <p class="gap">心理有些波动，迷茫。</p>
+    <p>时间会修正一切，让古韵再歇一会吧。</p>
+    <p class="gap">短暂休憩后，继续前行。</p>
+    <p>故友的期许从未停止。</p>
+    <p class="gap">她在远方等待古韵的到来。</p>
+    <p>这天，古韵又畅想了结束后的计划。</p>
+    <p class="gap">也正在给同行者准备祝福。</p>
+    <p>信封些许，贴纸几张，盖上了印章。</p>
+    <p class="gap verse em">古韵仍在前行，充满了决心。</p>
+  </article>
+
+  <article class="piece">
+    <p class="ttl">拉力赛</p>
+
+    <p class="gap me">……好像引擎已经彻底损坏了</p>
+    <p class="me">哎，看来还是无法完成比赛啊</p>
+    <p class="gap me">抱歉啊【ANSE】，无法带你站上领奖台了</p>
+
+    <p class="gap">没事没事的，虽然有点可惜，但是嘛，</p>
+    <p>我们不是已经站在赛场上了吗？</p>
+    <p class="gap">你想想啊，我之前可是连外出都不敢出来呢。</p>
+    <p class="gap me">可……</p>
+    <p>好了好了，不用再说了。反正嘛，我们现在也啥都干不了了。</p>
+    <p class="gap">还是等待比赛时间结束，或者等赛场的救援队吧。</p>
+    <p class="me">哎，好吧，也只能等待了。</p>
+
+    <hr class="hr">
+
+    <p class="tn">{ 大约 10 个标准分钟后 }</p>
+    <p class="lbl">》》》【频道接入请求】卡尔塔请求接入您的频道</p>
+    <p class="gap me">？卡尔塔，他怎么现在要接入我的频道？</p>
+    <p class="lbl">》》》【频道接入请求】，【频道接入请求】，【频道接入请求】……（未读消息 42）</p>
+    <p class="lbl">》》》【总结】：船长，我们来助你！！！（本土化，未必百分比准确，更准确的请订阅高级版）</p>
+
+    <hr class="hr">
+
+    <p class="lbl">》》好的，来自各个星系的观众朋友们，大家好啊！！！</p>
+    <p class="lbl">》》在经过三天的激烈追逐后，我们拉力赛马上就要看到最终冠军的诞生了。</p>
+    <p class="lbl">》》现在场上还剩下 27 支队伍，那么领先的队伍是哪支呢？</p>
+    <p class="lbl">》》诶诶，导播该切换显示屏幕了。</p>
+    <p class="lbl">》》咳咳，刚才导播那边出现了点小意外，不过不要紧。</p>
+    <p class="gap lbl">》》好的，领先的队伍是——</p>
+
+  </article>
+</section>
+
+<section class="tqc" id="reality">
+  <p class="idx">04</p>
+  <h2>虚幻之境（现实）结局</h2>
+  <p class="en">Epilogue · Ethereal Realm</p>
+
+  <article class="piece">
+    <p class="ttl">悲观的理想主义者</p>
+
+    <p class="verse">再一次，登上了那座雪山。</p>
+    <p class="verse gap">这是第几次了？记不清了。</p>
+
+    <p class="gap"><span class="lbl">AH：</span>来这里是为了什么？</p>
+    <p><span class="lbl">IE：</span>是为了……那个约定。</p>
+    <p class="gap">一个未知但又既定的结果。</p>
+
+    <p class="gap"><span class="lbl">AH：</span>但信上也说了，既定也会是不定。</p>
+    <p>一切取决于所作出的决定。</p>
+    <p class="gap">他早早地在道路的尽头等候。</p>
+    <p class="gap">等待相遇之人，那你呢？</p>
+
+    <p class="gap"><span class="lbl">IE：</span>会按照约定，和等待之人相遇。</p>
+    <p class="gap verse em">也许……理想依旧吧？</p>
+    <p class="verse em">也许吧？</p>
+  </article>
+
+  <article class="piece">
+    <p class="ttl">紫罗兰</p>
+
+    <p class="tn">《紫罗兰》NO.55496</p>
+
+    <p class="verse gap">我们不奢求荣华富贵，</p>
+    <p class="verse">我们不羡慕长生不老，</p>
+    <p class="verse gap">我们不追求比肩神明，</p>
+    <p class="verse">但，为了米兰，为了逝去的一切，</p>
+    <p class="verse">我们愿意献上一切，</p>
+    <p class="verse">倾尽所有，战至最后一人，</p>
+    <p class="verse">不择手段，保护最后的火焰，</p>
+    <p class="verse">无怨无悔，前往最后的创世，</p>
+    <p class="verse gap">望，祝福过去，约旦未来，</p>
+    <p class="verse">为，米兰，罗兰，紫罗兰，</p>
+    <p class="verse em">再，敬文明，敬，自己。</p>
+  </article>
+</section>
+
+<section class="tqc" id="about">
+  <p class="idx">05</p>
+  <h2>关于</h2>
+  <p class="en">Notes</p>
+
+  <div class="ph" aria-hidden="true"></div>
+</section>
+
+</main>
+
+<footer style="margin-top:70px">
+  <span>© 2026 AYGY 暗夜古韵</span>
+  <span>天穹下的群星</span>
+</footer>
+
+
+<script>
+/* 篇目卡：把每个 .piece 拆成「可点的标题行 + 可收起的正文」 */
+(function(){
+  var pieces = [].slice.call(document.querySelectorAll('.piece'));
+  pieces.forEach(function(pc){
+    var ttl  = pc.querySelector('.ttl');
+    var name = ttl ? ttl.textContent.trim() : '未命名';
+    if (ttl) ttl.parentNode.removeChild(ttl);
+
+    var body = document.createElement('div');
+    body.className = 'piece-b';
+    var inner = document.createElement('div');
+    var pad = document.createElement('div');
+    pad.className = 'in';
+
+    while (pc.firstChild) pad.appendChild(pc.firstChild);
+    inner.appendChild(pad);
+    body.appendChild(inner);
+
+    var chars = pad.textContent.replace(/\s+/g, '').length;
+    var count = chars >= 1000 ? (chars / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : chars;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'piece-h';
+    btn.innerHTML = '<span class="h-t"></span><span class="h-n"></span><span class="h-i"></span>';
+    btn.querySelector('.h-t').textContent = name;
+    btn.querySelector('.h-n').textContent = count + ' 字';
+
+    pc.appendChild(btn);
+    pc.appendChild(body);
+
+    btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', function(){
+      var open = pc.classList.contains('on');
+      if (!open) {
+        [].forEach.call(pieces, function(o){
+          o.classList.remove('on');
+          var b = o.querySelector('.piece-h');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+      }
+      pc.classList.toggle('on');
+      btn.setAttribute('aria-expanded', pc.classList.contains('on') ? 'true' : 'false');
+    });
+  });
+
+  if (pieces[0]) {
+    pieces[0].classList.add('on');
+    var b0 = pieces[0].querySelector('.piece-h');
+    if (b0) b0.setAttribute('aria-expanded', 'true');
+  }
+})();
+</script>
+</body>
+</html>

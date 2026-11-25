@@ -1,0 +1,1351 @@
+<!doctype html>
+<!-- 七盏灯 v2 · 2026-11-22 · 七个字母在这里 -->
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>泛大陆联合学院 · 设定图鉴</title>
+<meta name="description" content="五千年学院，七位贤者，九大职业。泛大陆联合学院的学制、学院、校务与校园地图。">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .grades{display:flex;align-items:center;gap:10px;padding:26px 56px 0;font-size:11px;letter-spacing:.2em;color:var(--ink-3)}
+  .grades b{font-weight:400;color:var(--ink-3);margin-right:6px}
+  .grades i{font-style:normal;width:32px;height:32px;display:grid;place-items:center;
+    border:1px solid var(--line);color:var(--ink-2);font-size:11px;letter-spacing:.08em;transition:.3s}
+  .grades i.g-e{color:#8d8a95;border-color:rgba(141,138,149,.35)}
+  .grades i.g-d{color:#9fb0c8;border-color:rgba(159,176,200,.4)}
+  .grades i.g-c{color:#7fc9c8;border-color:rgba(127,201,200,.45)}
+  .grades i.g-b{color:#8fbfe0;border-color:rgba(143,191,224,.5)}
+  .grades i.g-a{color:#c9a6e6;border-color:rgba(201,166,230,.55)}
+  .grades i.g-s{color:var(--pink);border-color:var(--pink);background:rgba(229,142,176,.12);box-shadow:0 0 18px -6px rgba(229,142,176,.6)}
+  .lb img.inv{filter:invert(1) hue-rotate(180deg) saturate(.9)}
+  .lb .cap{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+    color:var(--ink-3);margin:0;padding:12px 56px 14px;text-align:right;
+    border-top:1px solid var(--line);
+  }
+  .smap{
+    --bg:#070a12; --panel:#0d1220; --panel2:#111a2e;
+    --gold:#e3b877; --gold-dim:#8a6d45; --ink:#e8e3d8; --muted:#8c93a8;
+    --line:#1d2a45;
+  }
+  .app{display:grid; grid-template-columns:minmax(360px,42%) 1fr; min-height:620px; align-items:stretch}
+  /* ---------- 左侧：地图 ---------- */
+  .side{
+    position:relative; padding:18px 20px 14px; border-right:1px solid var(--line);
+    display:flex; flex-direction:column; min-width:0;
+    background:linear-gradient(180deg,#0b1120 0%,#070a12 100%);
+  }
+  .brand{display:flex; align-items:baseline; gap:10px; margin-bottom:2px}
+  .brand h1{
+    font-family:"STSong","SimSun","Songti SC",serif; font-size:23px; margin:0; letter-spacing:2px;
+    color:var(--gold);
+  }
+  .brand span{font-size:11px; color:var(--muted); letter-spacing:1px}
+  .hint{font-size:12px; color:var(--muted); margin:6px 0 10px; line-height:1.6}
+  .hint b{color:var(--gold); font-weight:600}
+  .map-wrap{
+    flex:0 0 auto; position:relative; width:100%;
+    aspect-ratio:1000 / 1275; max-height:none;
+    margin:0 auto;
+    border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    background:#080c16;
+    box-shadow:inset 0 0 60px rgba(0,0,0,.7);
+  }
+  svg#sceneMap{width:100%; height:100%; display:block; cursor:default}
+  .bld{cursor:pointer}
+  .bld .hit{fill:transparent}
+  .bld .shape{fill:#0e1729; stroke:var(--gold-dim); stroke-width:1.6; transition:.18s}
+  .bld .shape *{vector-effect:non-scaling-stroke}
+  .bld .label{
+    font-size:24px; fill:#d6dded; text-anchor:middle; transition:.18s;
+    paint-order:stroke; stroke:#070a12; stroke-width:6; letter-spacing:1px;
+  }
+  .bld .tag{font-size:10px; fill:#5d6b88; text-anchor:middle; letter-spacing:1px}
+  .bld:hover .shape{stroke:var(--gold); fill:#152340; filter:drop-shadow(0 0 6px rgba(227,184,119,.45))}
+  .bld:hover .label{fill:#fff}
+  .bld.active .shape{stroke:var(--gold); fill:#1b2c4f; filter:drop-shadow(0 0 10px rgba(227,184,119,.7))}
+  .bld.active .label{fill:var(--gold)}
+  .bld.has-img .shape{fill:#131f38}
+  .bld .dot{fill:var(--gold)}
+  .road{stroke:#1a2540; stroke-width:10; fill:none; stroke-linecap:round}
+  .road2{stroke:#22304f; stroke-width:2; fill:none; stroke-dasharray:3 8}
+  .ridge{stroke:#141e33; fill:none; stroke-width:1.2}
+  .map-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; color:var(--muted); margin-top:10px;
+  }
+  /* ---------- 右侧：查看器 ---------- */
+  .viewer{
+    display:flex; flex-direction:column; min-width:0; padding:18px 22px 14px;
+    position:sticky; top:0; height:100vh; align-self:start;
+    background:linear-gradient(180deg,#0a0f1c 0%,#060911 100%);
+  }
+  .v-head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:10px; flex-wrap:wrap}
+  .v-title{display:flex; align-items:center; gap:12px; min-width:0}
+  .badge{
+    font-size:11px; letter-spacing:1px; color:var(--gold); border:1px solid var(--gold-dim);
+    padding:3px 8px; border-radius:6px; white-space:nowrap;
+  }
+  .v-title h2{
+    margin:0; font-family:"STSong","SimSun","Songti SC",serif; font-size:27px; letter-spacing:2px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .v-desc{margin:2px 0 0; font-size:12.5px; color:var(--muted); line-height:1.7; max-width:760px}
+  .tabs{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; max-width:56%}
+  .tab{
+    font-size:12px; padding:5px 11px; border-radius:999px; cursor:pointer;
+    border:1px solid var(--line); color:var(--muted); background:transparent; transition:.15s;
+  }
+  .tab:hover{color:var(--ink); border-color:var(--gold-dim)}
+  .tab.on{color:#111; background:var(--gold); border-color:var(--gold); font-weight:600}
+  /* 舞台 */
+  .stage{
+    position:relative; flex:1 1 auto; min-height:240px; border-radius:16px; overflow:hidden;
+    border:1px solid var(--line); background:#05070d;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stage img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block}
+  .stage .empty{position:absolute; inset:0; display:flex; align-items:center; justify-content:center}
+  .empty-inner{display:flex; flex-direction:column; align-items:center; gap:14px; color:var(--muted)}
+  .empty svg{width:230px; height:230px; filter:drop-shadow(0 10px 30px rgba(0,0,0,.6))}
+  .empty p{margin:0; font-size:13px; letter-spacing:1px}
+  .empty p b{color:var(--gold); font-weight:600}
+  .empty .sub{font-size:11px; color:#5d6b88}
+  /* 方位按钮 */
+  .dirlayer{
+    position:absolute; inset:0; z-index:3; pointer-events:none;
+    display:grid; padding:12px;
+    grid-template-columns:56px 1fr 56px;
+    grid-template-rows:56px 1fr 56px;
+    grid-template-areas:". n ." "w . e" ". s .";
+  }
+  .dir{
+    pointer-events:auto; width:50px; height:50px; border-radius:50%; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+    background:rgba(6,10,18,.78); border:1px solid var(--gold-dim); color:#d5dcec;
+    font-size:11px; letter-spacing:1px; transition:.15s; backdrop-filter:blur(3px);
+    box-shadow:0 4px 16px rgba(0,0,0,.5);
+  }
+  .dir:hover{border-color:var(--gold); color:#fff; background:rgba(22,34,58,.92); transform:scale(1.07)}
+  .dir.on{background:rgba(227,184,119,.95); color:#0b0f1a; border-color:var(--gold); font-weight:700}
+  .dir.empty{opacity:.62; border-style:dashed}
+  .dir.n{grid-area:n; justify-self:center; align-self:start}
+  .dir.s{grid-area:s; justify-self:center; align-self:end}
+  .dir.w{grid-area:w; justify-self:start; align-self:center}
+  .dir.e{grid-area:e; justify-self:end; align-self:center}
+  .dir b{font-size:13px; line-height:1}
+  .caption{
+    position:absolute; left:16px; bottom:16px; z-index:2;
+    font-size:12px; color:#d8d2c4; background:rgba(6,9,17,.74);
+    padding:5px 11px; border-radius:8px; border:1px solid var(--line);
+    letter-spacing:1px;
+  }
+  .caption em{color:var(--gold); font-style:normal; font-weight:600}
+  /* 缩略图 */
+  .thumbs{
+    display:flex; gap:10px; margin-top:12px; min-height:84px; overflow-x:auto; padding-bottom:4px;
+  }
+  .thumbs::-webkit-scrollbar{height:6px}
+  .thumbs::-webkit-scrollbar-thumb{background:#1d2a45; border-radius:3px}
+  .thumb{
+    width:136px; height:90px; border-radius:9px; overflow:hidden; cursor:pointer; flex:0 0 auto;
+    border:1px solid var(--line); position:relative; background:#080c16; transition:.15s;
+  }
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block; opacity:.82}
+  .thumb:hover{border-color:var(--gold-dim); transform:translateY(-2px)}
+  .thumb:hover img{opacity:1}
+  .thumb.on{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold)}
+  .thumb.on img{opacity:1}
+  .thumb .t{
+    position:absolute; left:0; right:0; bottom:0; font-size:10px; line-height:1.35; color:#e6ecf7;
+    background:linear-gradient(transparent,rgba(4,7,13,.94)); padding:12px 6px 6px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .thumb.ph{display:flex; align-items:center; justify-content:center; border-style:dashed; color:#3d4a66; font-size:11px}
+  .foot{margin-top:8px; font-size:11px; color:#4a5674; display:flex; justify-content:space-between}
+  kbd{background:#131c30; border:1px solid #22304f; border-radius:4px; padding:1px 5px; font-size:10px; color:#9aa6c0}
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr; grid-template-rows:52vh 1fr}
+    .side{border-right:none; border-bottom:1px solid var(--line)}
+  }
+  /* ---- 嵌进站点的收口 ---- */
+  .smap{margin:0 0 26px;border:1px solid var(--line);overflow:hidden;background:#070a12}
+  .smap .app{min-height:560px}
+  .smap .side{padding:16px 18px 12px}
+  .smap .viewer{position:static;height:auto;min-height:560px}
+  .smap .map-wrap{border-radius:6px}
+  .smap .tabs{max-width:none;justify-content:flex-start}
+  .smap .v-head{flex-direction:column;align-items:flex-start;gap:9px}
+  .smap .tab{font-size:11px;padding:4px 10px}
+  .smap .v-title h2{font-size:23px}
+  .smap .brand h1{font-size:19px;letter-spacing:2px}
+  @media (max-width:1080px){
+    .smap .app{grid-template-columns:1fr;min-height:0}
+    .smap .side{border-right:0;border-bottom:1px solid var(--line)}
+    .smap .viewer{min-height:0}
+  }
+
+
+  @media (max-width:1080px){
+    .grades{padding:20px 24px 0;flex-wrap:wrap}
+    }
+
+  /* 人物档案 · 链接式 */
+  .sage-list b.p-link,.place .p-link{cursor:pointer;border-bottom:1px dotted rgba(255,255,255,.2);transition:.25s}
+  .sage-list b.p-link:hover,.place .p-link:hover{color:#7fe3d6;border-bottom-color:#7fe3d6}
+  /* 学生名册 */
+  .roster{margin:0 56px}
+  .r-bar{display:flex;gap:14px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .r-bar input{
+    flex:1;min-width:200px;background:transparent;border:0;border-bottom:1px solid var(--line-2);
+    color:var(--ink);font-family:var(--serif);font-size:14px;letter-spacing:.06em;padding:10px 2px;
+  }
+  .r-bar input::placeholder{color:var(--ink-3)}
+  .r-bar input:focus{outline:0;border-bottom-color:#7fe3d6}
+  .r-count{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--ink-3)}
+  .r-wrap{max-height:560px;overflow:auto;border-top:1px solid var(--line)}
+  .r-wrap::-webkit-scrollbar{width:6px}
+  .r-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12)}
+  table.rt{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.rt th{
+    position:sticky;top:0;z-index:1;background:#0b0b10;text-align:left;
+    font-weight:400;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+    color:var(--ink-3);padding:10px 10px;border-bottom:1px solid var(--line);
+  }
+  table.rt td{padding:10px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--ink-2)}
+  table.rt tr:hover td{background:rgba(255,255,255,.025)}
+  table.rt td.id{font-family:var(--mono);font-size:10.5px;color:#7fe3d6;letter-spacing:.04em;white-space:nowrap}
+  table.rt td.nm{color:var(--ink)}
+  table.rt td.rk{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .r-empty{padding:26px 10px;color:var(--ink-3);font-size:12px}
+  /* 章程卡 */
+  .charter{margin:0 56px;border:1px solid var(--line);padding:26px 30px;display:flex;
+    align-items:center;justify-content:space-between;gap:20px;cursor:pointer;transition:.28s}
+  .charter:hover{border-color:rgba(127,227,214,.5);background:rgba(127,227,214,.03)}
+  .charter b{font-weight:400;font-size:15px;letter-spacing:.08em}
+  .charter span{font-size:11.5px;color:var(--ink-3);letter-spacing:.1em}
+  .charter em{font-style:normal;font-family:var(--mono);font-size:10px;color:#7fe3d6;letter-spacing:.2em}
+  /* 灯箱 · 文档 */
+  .lb .doc{display:none;width:min(880px,92vw);
+    background:#0b0b10;border:1px solid var(--line-2);padding:40px 48px;cursor:default}
+  .lb.doc-mode .doc{display:block}
+  .lb.doc-mode img{display:none}
+  .lb{display:block;overflow-y:auto;overflow-x:hidden;padding:40px 90px;text-align:center}
+  .lb .doc,.lb img{display:inline-block;text-align:left;margin:0 auto}
+  .lb img{max-height:none;width:auto;max-width:100%}
+  .deans{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .deans li{padding:24px 26px 26px;border-right:1px solid var(--line)}
+  .deans li:last-child{border-right:0}
+  .deans b{display:block;font-size:19px;font-weight:400;letter-spacing:.08em;margin-bottom:6px}
+  .deans b.p-link{cursor:pointer;border-bottom:1px dotted rgba(255,255,255,.2);transition:.25s}
+  .deans b.p-link:hover{color:#7fe3d6;border-bottom-color:#7fe3d6}
+  .deans span{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;color:#7fe3d6}
+  .deans em{display:block;margin-top:12px;font-style:normal;font-size:12.5px;line-height:1.95;color:var(--ink-2)}
+  .dean-note{margin:0;padding:14px 26px 0;font-size:12px;line-height:1.9;color:var(--ink-3);letter-spacing:.03em}
+  #affairs .places{grid-template-columns:repeat(3,1fr);padding:26px 56px 0}
+
+  .lb .doc:focus{outline:none}
+  .doc h2{font-size:19px;font-weight:400;letter-spacing:.1em;margin:0 0 6px}
+  .doc .sub{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#7fe3d6;margin-bottom:26px}
+  .doc dl{margin:0}
+  .doc dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--ink-3);margin-top:16px}
+  .doc dd{margin:5px 0 0;font-size:13px;line-height:1.75;color:var(--ink-2)}
+  .doc .ch{font-size:13px;letter-spacing:.16em;color:var(--ink);margin:30px 0 12px;
+    padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .doc .art{display:flex;gap:16px;padding:9px 0;font-size:12.5px;line-height:1.8;color:var(--ink-2)}
+  .doc .art .hl{color:var(--ink)}
+  .doc .art b{flex:0 0 62px;font-weight:400;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-3);padding-top:3px}
+  .print-secret .ps-swap{margin:8px 0 26px;color:#333;font-size:10.5pt;line-height:2;letter-spacing:.18em}
+</style>
+
+<style>
+/* 打印时才存在的一页。屏幕上它不占位置。 */
+  /* 内部档案 · 登录 */
+  .vault{border:1px solid var(--line);background:rgba(255,255,255,.02);padding:30px 32px;max-width:660px}
+  .vault-hint{margin:0 0 20px;font-size:13px;color:var(--ink-2);line-height:1.9}
+  .vault-form{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-end}
+  .vault-form label{display:flex;flex-direction:column;gap:3px;line-height:1;font-size:11.5px;letter-spacing:.14em;color:var(--ink-3)}
+  .vault-form label>span{line-height:1}
+  .vault-form input{display:block;width:186px;height:24px;background:transparent;border:0;border-bottom:1px solid var(--line-2);color:var(--ink);font:inherit;font-size:13.5px;padding:0 2px;letter-spacing:.06em}
+  .vault-form input:focus{outline:0;border-bottom-color:var(--navy)}
+  .vault-form button{background:transparent;border:1px solid var(--line-2);color:var(--ink);font:inherit;font-size:12px;letter-spacing:.2em;padding:9px 24px;cursor:pointer;transition:.3s}
+  .vault-form button:hover{border-color:var(--navy);color:#fff}
+  .vault-msg{margin:14px 0 0;font-size:12px;color:var(--ink-3);min-height:18px;letter-spacing:.06em}
+  .vault-msg.err{color:#d98a8a}
+  .vault-msg.ok{color:var(--teal)}
+  .vault.done{display:none}
+  .vault.bad{animation:vshake .42s}
+  @keyframes vshake{0%,100%{transform:none}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+
+  /* 档案卡片（解锁后出现，点开看内容） */
+  .arch-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:12px;margin:24px 0 0;max-width:940px}
+  .arch-list[data-on="0"]{display:none}
+  .arch{
+    display:flex;flex-direction:column;justify-content:flex-start;min-height:112px;
+    width:100%;text-align:left;white-space:normal;cursor:pointer;
+    border:1px solid var(--line);background:rgba(255,255,255,.02);
+    padding:18px 18px 16px;font:inherit;color:var(--ink);
+    transition:border-color .3s,background .3s,transform .3s;
+  }
+  .arch:hover{border-color:var(--navy);background:rgba(109,127,181,.09);transform:translateY(-2px)}
+  .arch .arch-no{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--navy);margin:0 0 12px}
+  .arch .arch-obj{display:block;font-size:13.5px;line-height:1.65;color:var(--ink)}
+  .arch .arch-meta{display:block;margin:10px 0 0;font-size:11px;line-height:1.5;letter-spacing:.06em;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* 档案正文放进灯箱时用站点深色 */
+  .lb .doc .ps-page{max-width:none;margin:0;padding:0;border:0}
+  .lb .doc .ps-page h1{font-family:var(--serif);font-size:25px;font-weight:400;color:var(--ink);letter-spacing:.06em;margin:0 0 20px}
+  .lb .doc .ps-org{font-size:10.5px;letter-spacing:.22em;color:var(--ink-3);border-bottom:1px solid var(--line);padding-bottom:12px;margin:0 0 24px}
+  .lb .doc .ps-meta{font-size:12px;letter-spacing:.1em;color:var(--ink-3);margin:0 0 18px}
+  .lb .doc .ps-lead{font-size:14px;color:var(--ink);margin:0 0 14px}
+  .lb .doc .ps-note{font-size:13.5px;line-height:1.95;color:var(--ink-2);border-left:2px solid var(--line-2);padding-left:16px;margin:18px 0}
+  .lb .doc .ps-sign,.lb .doc .ps-verso{font-size:12px;letter-spacing:.1em;color:var(--ink-3);margin:16px 0 0}
+  .lb .doc .ps-square{color:var(--ink-2);letter-spacing:.24em}
+  .lb .doc .ps-swap{font-size:13px;letter-spacing:.14em;color:var(--ink-2);margin:6px 0 20px;line-height:2}
+  .lb .doc .ps-n{font-family:var(--serif);font-size:34px;color:var(--ink);margin:10px 0 0}
+
+.print-secret{display:none !important}
+@media print{
+  @page{ size:A4; margin:20mm }
+  html,body{ background:#fff !important }
+  body *{ visibility:hidden !important }
+  body.vault-open .print-secret, body.vault-open .print-secret *{ visibility:visible !important }
+  body.vault-open .print-secret{
+    display:block !important;
+    position:absolute; left:0; top:0; width:100%;
+    color:#111; font-family:"Songti SC","SimSun","Noto Serif CJK SC",serif;
+    font-size:12pt; line-height:2;
+    max-width:150mm; margin:0 auto;
+  }
+  .print-secret .ps-org{
+    font-size:9pt; letter-spacing:.3em; color:#666;
+    border-bottom:1px solid #999; padding-bottom:6pt; margin:0 0 24pt;
+  }
+  .print-secret h1{
+    font-size:22pt; letter-spacing:.1em; font-weight:400; margin:0 0 6pt;
+  }
+  .print-secret .ps-meta{
+    font-size:9pt; color:#555; letter-spacing:.14em; margin:0 0 26pt;
+  }
+  .print-secret p{ margin:0 0 10pt }
+  .print-secret .ps-lead{ font-size:13pt; margin-bottom:16pt }
+  .print-secret .ps-note{
+    margin-top:22pt; padding-left:12pt; border-left:2px solid #bbb; color:#444;
+  }
+  .print-secret .ps-sign{ margin-top:30pt; font-size:10pt; color:#555 }
+  .print-secret .ps-square{letter-spacing:.12em;font-size:11pt;color:#333}
+  .ps-blank{ display:inline-block; width:140pt; border-bottom:1px solid #333 }
+  .print-secret .ps-page{ page-break-before:always; break-before:page }
+  .print-secret .ps-page:first-child{ page-break-before:auto; break-before:auto }
+  .print-secret .ps-verso{
+    margin-top:44pt; font-size:8pt; color:#999; letter-spacing:.2em;
+  }
+  .print-secret .ps-n{
+    font-size:34pt; font-weight:700; color:#2a2a2a;
+    margin-top:2pt; font-family:Georgia,serif; transform:rotate(-6deg); display:inline-block;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="index.html">← 返回目录</a>
+  <div class="mid">泛大陆联合学院</div>
+  <nav class="nav">
+    <a href="#rule">学制</a>
+    <a href="#schools">学院</a>
+    <a href="#affairs">校务</a>
+    <a href="#sages">贤者</a>
+    <a href="#roster">名册</a>
+    <a href="#charter">章程</a>
+    <a href="#map">地图</a>
+    <a href="#vault">档案</a>
+  </nav>
+</header>
+
+<section class="page-head">
+  <div class="kicker">设定 · 图鉴</div>
+  <h1>泛大陆联合学院</h1>
+  <p class="sub2">五千年学院 · 七位贤者 · 九大职业</p>
+  <div class="stats">
+    <div class="stat"><b>5000<em>年</em></b><span>建校至今</span></div>
+    <div class="stat"><b>1000<em>人</em></b><span>每届招生</span></div>
+    <div class="stat"><b>15<em>岁以上</em></b><span>入学年龄</span></div>
+    <div class="stat"><b>8<em>枚</em></b><span>一学期学费 · 中等晶币</span></div>
+  </div>
+</section>
+
+<section class="sec" id="rule">
+  <div class="sec-head"><h2>学制</h2><span>十二学年 · 六级制 · 每级两年</span></div>
+  <div class="plans">
+    <div class="plan">
+      <div class="n">考试 01</div>
+      <h3>开学考</h3>
+      <p>三月。决定这一学期进哪个教室，也决定谁还记得你的名字。</p>
+    </div>
+    <div class="plan">
+      <div class="n">考试 02</div>
+      <h3>随机考</h3>
+      <p>七至九月。没有通知，没有范围。它只是来确认你有没有在。</p>
+    </div>
+    <div class="plan">
+      <div class="n">考试 03</div>
+      <h3>期末考</h3>
+      <p>十二月末。评级从 E 到 S。大多数人一辈子停在 C+。</p>
+    </div>
+  </div>
+  <div class="grades">
+    <b>评级</b>
+    <i class="g-e">E</i><i class="g-d">D</i><i class="g-c">C</i><i class="g-b">B</i><i class="g-a">A</i><i class="g-s">S</i>
+  </div>
+</section>
+
+<section class="sec" id="schools">
+  <div class="sec-head"><h2>九大学院与九大职业</h2><span>学院是住的地方，职业是走的路</span></div>
+  <div class="lists">
+    <div class="list">
+      <h3>九大学院</h3>
+      <ol>
+        <li><em>01</em>魔法 · 冰霜</li>
+        <li><em>02</em>骑士</li>
+        <li><em>03</em>草药</li>
+        <li><em>04</em>锻造</li>
+        <li><em>05</em>炼金</li>
+        <li><em>06</em>牧师</li>
+        <li><em>07</em>学术</li>
+        <li><em>08</em>艺术</li>
+        <li><em>09</em>特殊</li>
+      </ol>
+    </div>
+    <div class="list">
+      <h3>九大职业</h3>
+      <ol>
+        <li><em>01</em>法师</li>
+        <li><em>02</em>神殿</li>
+        <li><em>03</em>学者</li>
+        <li><em>04</em>骑士</li>
+        <li><em>05</em>锻造</li>
+        <li><em>06</em>炼金术师</li>
+        <li><em>07</em>药剂师</li>
+        <li><em>08</em>艺术</li>
+        <li><em>09</em>占卜师</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="affairs">
+  <div class="sec-head"><h2>校务</h2><span>三个人管行政、学术、外务</span></div>
+  <ul class="deans">
+    <li><b class="p-link" data-p="晓星">晓星</b><span>行政</span><em>招生注册、学费与账目、宿舍分配、纪律处分</em></li>
+    <li><b class="p-link" data-p="艾玛">艾玛</b><span>学术</span><em>课程设置、考试与评级、教师资格、图书馆馆藏</em></li>
+    <li><b class="p-link" data-p="蝶月">蝶月</b><span>外务</span><em>任务厅、外出实习与派遣、与职业协会 / 教会 / 各国交涉</em></li>
+  </ul>
+  <p class="dean-note">三个人很少同时出现在一张桌子上 —— 上一次是风暴那年的招生会。</p>
+  <div class="places">
+    <div class="place">
+      <h4>图书馆</h4>
+      <p>地上七层，地下五层。五层是古籍修复，六层是馆长，七层是观星台。禁书在负三层与负四层，圣物在负五层，钥匙不在馆长手里。</p>
+    </div>
+    <div class="place">
+      <h4>宿舍 · 六区</h4>
+      <p>六区分住九大学院，特殊学院单独一区。东北塔楼不在这六区里——那是贤者的地方。</p>
+    </div>
+    <div class="place">
+      <h4>界欧珀教会</h4>
+      <p>教阶从教皇到牧师，分保守派与开放派，圣物是「界欧珀」。先知不入教籍。驻院祭司是小满，雾海那边归老托马斯管。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sages">
+  <div class="sec-head"><h2>七贤者</h2><span>学院的最高学术</span></div>
+  <ul class="sage-list">
+    <li class="on"><span class="no">01</span><b class="p-link" data-p="安娜斯·千">安娜斯·千</b><span class="title">群星中的旅人</span><span>冰系 · S 级十环 · 东北塔楼</span></li>
+    <li><span class="no">02</span><b class="p-link" data-p="陈依零">陈依零</b><span class="title">天南海北的诗人</span><span>火系 · S 级八环</span></li>
+    <li><span class="no">03</span><b class="p-link" data-p="伊莉丝">伊莉丝</b><span class="title">临界下的升格者</span><span>——</span></li>
+    <li><span class="no">04</span><b class="p-link" data-p="索菲">索菲</b><span class="title">无名的逐光者</span><span>——</span></li>
+    <li><span class="no">05</span><b class="p-link" data-p="莱娅">莱娅</b><span class="title">死亡的摆渡人</span><span>——</span></li>
+    <li><span class="no">06</span><b class="p-link" data-p="卡斯娜娜">卡斯娜娜</b><span class="title">深渊的执火人</span><span>——</span></li>
+    <li><span class="no">07</span><b class="p-link" data-p="依斯泰普·艾伦">依斯泰普·艾伦</b><span class="title">徘徊的守墓人</span><span>——</span></li>
+  </ul>
+</section>
+
+<section class="sec" id="roster">
+  <div class="sec-head"><h2>学生名册</h2><span>在籍 36 人 · 按学号可搜</span></div>
+  <div class="roster">
+    <div class="r-bar">
+      <input id="rq" type="text" placeholder="输入学号 / 姓名 / 学院 / 职业 —— 例如 OR-5042 或 冰霜 ">
+      <span class="r-count" id="rc"></span>
+    </div>
+    <div class="r-wrap">
+      <table class="rt">
+        <thead><tr><th>学号</th><th>姓名</th><th>种族</th><th>年级</th><th>学院</th><th>属性</th><th>等第</th><th>职业等级</th><th>宿舍</th></tr></thead>
+        <tbody id="rb"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="map">
+  <div class="sec-head"><h2>学院地图</h2><span>三十四处场景 · 点击建筑看画面</span></div>
+
+<div class="smap" id="smap">
+<div class="app">
+  <!-- ========== 地图 ========== -->
+  <aside class="side">
+    <p class="hint">点击地图上的 <b>建筑名称</b> 查看场景 · 图片四边的 <b>方位按钮</b> 切换视角</p>
+    <div class="map-wrap">
+      <svg id="sceneMap" viewBox="0 0 1000 1275" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <radialGradient id="ground" cx="48%" cy="42%" r="72%">
+            <stop offset="0" stop-color="#141e34"/><stop offset="1" stop-color="#070a12"/>
+          </radialGradient>
+          <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
+        </defs>
+        <rect width="1000" height="1275" fill="url(#ground)"/>
+        <!-- 地形等高线 -->
+        <g class="ridge" opacity=".9">
+          <ellipse cx="500" cy="620" rx="330" ry="400"/>
+          <ellipse cx="500" cy="620" rx="372" ry="446"/>
+          <path d="M120 380 Q 230 310 340 370"/>
+          <path d="M660 370 Q 770 310 880 380"/>
+          <path d="M110 900 Q 220 840 300 890"/>
+          <path d="M700 890 Q 800 840 890 900"/>
+        </g>
+        <!-- 外围森林点 -->
+        <g fill="#0f1729" opacity=".95">
+          <circle cx="66" cy="180" r="10"/><circle cx="92" cy="212" r="7"/><circle cx="52" cy="228" r="6"/>
+          <circle cx="936" cy="180" r="10"/><circle cx="910" cy="212" r="7"/><circle cx="950" cy="228" r="6"/>
+          <circle cx="64" cy="1120" r="10"/><circle cx="92" cy="1090" r="7"/>
+          <circle cx="938" cy="1120" r="10"/><circle cx="912" cy="1090" r="7"/>
+        </g>
+        </g>
+        <!-- 主路 -->
+        <g>
+          <path class="road" d="M500 1100 L500 915"/>
+          <path class="road" d="M500 862 L500 712"/>
+          <path class="road" d="M500 510 L500 350"/>
+          <path class="road" d="M400 350 L600 350"/>
+          <path class="road" d="M400 350 L400 315"/>
+          <path class="road" d="M600 350 L600 315"/>
+          <path class="road" d="M400 610 L186 610"/>
+          <path class="road" d="M600 610 L814 610"/>
+          <path class="road" d="M186 650 L186 712"/>
+          <path class="road" d="M814 650 L814 712"/>
+          <path class="road" d="M320 690 L320 850 L305 880"/>
+          <path class="road" d="M700 720 L700 880 L700 905"/>
+          <path class="road" d="M700 935 L655 1040"/>
+          <path class="road" d="M700 935 L790 1015"/>
+          <path class="road2" d="M186 748 L186 920 L196 948"/>
+        </g>
+      </svg>
+    </div>
+    <div class="map-foot">
+      <span id="stat"></span>
+    </div>
+  </aside>
+
+  <!-- ========== 查看器 ========== -->
+  <main class="viewer">
+    <div class="v-head">
+      <div class="v-title">
+        <span class="badge" id="badge">S02</span>
+        <h2 id="title">学院正门</h2>
+      </div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <p class="v-desc" id="desc"></p>
+
+    <div class="stage" id="stage">
+      <img id="photo" alt="" style="display:none">
+      <div class="empty" id="empty" style="display:none">
+        <div class="empty-inner">
+          <div id="dsmoe"></div>
+          <p><b id="emptyName">这里</b> 还没有画</p>
+          <p class="sub">DS 娘先站这儿占个位 · 点方位看看别的方向</p>
+        </div>
+      </div>
+      <div class="caption" id="caption"></div>
+      <div class="dirlayer">
+        <button class="dir n" data-dir="N"><b>▲</b>北</button>
+        <button class="dir e" data-dir="E"><b>▶</b>东</button>
+        <button class="dir s" data-dir="S"><b>▼</b>南</button>
+        <button class="dir w" data-dir="W"><b>◀</b>西</button>
+      </div>
+    </div>
+
+    <div class="thumbs" id="thumbs"></div>
+    <div class="foot">
+      <span>方向键 切方位 · 数字键 1–9 切变体 · Esc 取消选中</span>
+      <span id="count"></span>
+    </div>
+
+</main>
+</div>
+</div>
+
+  <div class="lb" id="lb"><span class="hit"></span><img id="lbimg" alt=""><div class="doc" id="lbdoc"></div><span class="cap" id="lbcap"></span></div>
+</section>
+
+<section class="sec" id="charter">
+  <div class="sec-head"><h2>学院章程</h2><span>第七次修订 · 十章三十六条</span></div>
+  <div class="charter" id="charterBtn">
+    <div>
+      <b>泛大陆联合学院章程</b><br>
+      <span>总则 · 学制 · 入学 · 考核 · 评级 · 宿舍 · 任务 · 纪律 · 毕业 · 附则</span>
+    </div>
+    <em>阅读全文 →</em>
+  </div>
+</section>
+
+  <section class="sec" id="vault">
+  <div class="sec-head"><h2>内部档案</h2><span>限学院账号 · 未登录不可阅</span></div>
+  <div class="vault" id="vaultCard">
+    <p class="vault-hint">以下为中央教学区内部归档，未经登记的阅览会被记在册上。<br>请输入学院账号与口令。</p>
+    <div class="vault-form">
+      <label><span>账号</span><input id="vUser" type="text" autocomplete="off" spellcheck="false" maxlength="24"></label>
+      <label><span>口令</span><input id="vPass" type="password" autocomplete="off" maxlength="32"></label>
+      <button id="vGo" type="button">进入</button>
+    </div>
+    <p class="vault-msg" id="vMsg"></p>
+  </div>
+  <div class="arch-list" id="vaultList" data-on="0"></div>
+</section>
+
+<div class="print-secret">
+<article class="ps-page">
+  <p class="ps-org">泛大陆联合学院 · 中央教学区 · 内部归档</p>
+  <h1>编号 001</h1>
+  <p class="ps-meta">类别：在册　　经手：招生注册处　　正本</p>
+  <p class="ps-lead">对象：一名没有名字的新生。</p>
+  <p>入学考核三项——属性测试、既有职业等级登记、面试——全部通过，评分栏写「A · 优秀」。</p>
+  <p>登记表上姓名一栏是空的。不是漏填：那一栏的纸比别处薄，像被擦过很多次。</p>
+  <p>她每天都来上课。同班没有人记得她坐在哪。</p>
+  <p class="ps-note">附注：第九周有人来问过这件事。此条转行政校长办公室并案 —— 见 007。</p>
+  <p class="ps-sign">归档人：<span class="ps-square">■■■■</span></p>
+</article>
+
+<article class="ps-page ps-007">
+  <p class="ps-org">泛大陆联合学院 · 中央教学区 · 内部归档</p>
+  <h1>编号 007</h1>
+  <p class="ps-meta">类别：未结案　　经手：行政校长办公室　　副本</p>
+
+  <p class="ps-lead">对象：一栋在夜里会多出一层的建筑。</p>
+
+  <p>观测记录——自第三纪元起，中央教学区西侧，每逢冬至后第七夜，多出一层。</p>
+  <p>窗内有影子。没有灯。</p>
+  <p>第七夜之后，那层楼消失。本学期已记录到第七次。</p>
+
+  <p class="ps-note">附注：档案室说不是他们放的。<br>图书馆长说「不是我的层」。</p>
+
+  <p class="ps-sign">归档人：<span class="ps-square">■■■■■■■■</span>　　<span style="font-size:8pt;color:#999">并案：001</span></p>
+
+  <p class="ps-verso">（本页背面有一行铅笔字）</p>
+  <p class="ps-swap">M 换 F<br>S 换 L<br>其余照抄。落款只有一个「她」。</p>
+  <p class="ps-n">N</p>
+</article>
+
+<article class="ps-page">
+  <p class="ps-org">泛大陆联合学院 · 中央教学区 · 内部归档</p>
+  <h1>编号 013</h1>
+  <p class="ps-meta">类别：存疑　　经手：图书馆　　副本</p>
+  <p class="ps-lead">对象：一本没有书名的书。</p>
+  <p>负五层之下不通人。负三层是禁书 B 区，每学期清点两次。</p>
+  <p>近四十次清点，每次都和上一次对不上 —— 多一本，少一本，总册数却一直没变。</p>
+  <p>对不上的是同一本。没有书名，书脊上只烫着一串数字，和它的架位编号一样。</p>
+  <p>抽出来翻过的人说里面是空的。但它比同厚度的空白册子重三百二十克。</p>
+  <p class="ps-note">馆长批注：「不要按架位找它。按那串数字找。」<br>（那串数字与 007 的落款日期一致。）</p>
+  <p class="ps-sign">归档人：<span class="ps-square">■■■■■■</span></p>
+</article>
+
+<article class="ps-page">
+  <p class="ps-org">泛大陆联合学院 · 中央教学区 · 内部归档</p>
+  <h1>编号 019</h1>
+  <p class="ps-meta">类别：机密　　经手：界欧珀教会 · 审判庭　　副本</p>
+  <p class="ps-lead">对象：圣物「界欧珀」的重量。</p>
+  <p>按教会章程，圣物每十年称重一次，记录入册。-5F 那间屋子里只有一张桌子、一杆秤、一本册子。</p>
+  <p>近十次称重，没有两次相同。差值没有规律，但从不减少。</p>
+  <p>最近三次的页边被人补了一行铅笔字：「它在长。」</p>
+  <p class="ps-note">教会的说法是秤的问题。秤换过三次。<br>学院这边的说法是：那间屋子在负五层，而负五层只有七级台阶。</p>
+  <p class="ps-sign">归档人：<span class="ps-square">■■■■■</span></p>
+</article>
+
+<article class="ps-page">
+  <p class="ps-org">泛大陆联合学院 · 中央教学区 · 内部归档</p>
+  <h1>编号 026</h1>
+  <p class="ps-meta">类别：在册　　经手：学院 · 礼制处　　正本</p>
+  <p class="ps-lead">对象：一名不肯离岗的守墓人。</p>
+  <p>依斯泰普 · 艾伦，亡灵，生前为人类。约三百年前「第二次教会冲突」中的死者，被学院以守墓契留在墓园。</p>
+  <p>出勤记录：无缺。五百年，无一天缺。</p>
+  <p>名册上他的名字被涂掉过一次，又被写回来。两次笔迹不同，都不是他自己的。</p>
+  <p class="ps-note">本人原话：「回来的人不算缺勤。」</p>
+  <p class="ps-sign">归档人：<span class="ps-square">■■■■</span></p>
+</article>
+
+<article class="ps-page">
+  <p class="ps-org">泛大陆联合学院 · 中央教学区 · 内部归档</p>
+  <h1>编号 031</h1>
+  <p class="ps-meta">类别：未结案　　经手：行政校长办公室　　副本</p>
+  <p class="ps-lead">对象：第七夜的值班签名。</p>
+  <p>中央教学区夜间值班，每夜一人，签在门厅的本子上。</p>
+  <p>冬至后第七夜，签到栏里有七个名字 —— 七个人，同一个笔迹。</p>
+  <p>问过。七个人都记得自己那晚值过班，也都记得那晚只有自己在。</p>
+  <p>本子翻到那一夜，纸是新的。</p>
+  <p class="ps-note">值班本这一册共用了十二年。<br>唯 007 那一夜的纸，比其他所有页都白。</p>
+  <p class="ps-sign">归档人：<span class="ps-square">■■■■■</span></p>
+</article>
+</div>
+
+<footer style="margin-top:70px">
+  <span>© 2026 AYGY 暗夜古韵</span>
+  <span>泛大陆联合学院</span>
+</footer>
+
+<script src="assets/js/fanda-data.js"></script>
+<script src="assets/js/ui.js"></script>
+
+<script>
+(function(){
+  var lb  = document.getElementById('lb'),
+      img = document.getElementById('lbimg'),
+      doc = document.getElementById('lbdoc'),
+      cap = document.getElementById('lbcap');
+  if(!lb) return;
+
+  function lock(on){ document.documentElement.style.overflow = on ? 'hidden' : ''; }
+  function close(){ lb.classList.remove('on'); lb.classList.remove('doc-mode'); lock(false); }
+
+  function openDoc(html, caption){
+    lb.setAttribute('tabindex','-1');
+    doc.innerHTML = html;
+    lb.scrollTop = 0;
+    setTimeout(function(){ lb.focus(); }, 30);
+    img.removeAttribute('src');
+    cap.textContent = caption || '';
+    lb.classList.add('on'); lb.classList.add('doc-mode'); lock(true);
+    lb.scrollTop = 0;
+  }
+  function openImg(src, caption){
+    img.src = src;
+    doc.innerHTML = '';
+    cap.textContent = caption || '';
+    lb.classList.remove('doc-mode');
+    lb.classList.add('on'); lock(true);
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (!lb.classList.contains('on')) return;
+    var step = (e.key === 'PageDown' || e.key === 'PageUp') ? lb.clientHeight * 0.88 : 60;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown'){ lb.scrollTop += step; e.preventDefault(); }
+    if (e.key === 'ArrowUp'   || e.key === 'PageUp'  ){ lb.scrollTop -= step; e.preventDefault(); }
+    if (e.key === 'Home'){ lb.scrollTop = 0; e.preventDefault(); }
+    if (e.key === 'End'){ lb.scrollTop = lb.scrollHeight; e.preventDefault(); }
+  });
+  lb.addEventListener('click', close);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+
+  if(!window.FANDA) return;
+
+  /* 人物档案 */
+  function personHTML(p){
+    var h = '<h2>'+p.name+'</h2><div class="sub">'+p.role+'</div><dl>';
+    p.rows.forEach(function(r){ h += '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; });
+    return h + '</dl>';
+  }
+  var byName = {};
+  FANDA.people.forEach(function(p){ byName[p.name] = p; });
+  document.querySelectorAll('[data-p]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      var p = byName[el.getAttribute('data-p')];
+      if(p) openDoc(personHTML(p), p.role);
+    });
+  });
+
+  /* 章程 */
+  var cbtn = document.getElementById('charterBtn');
+  if(cbtn){
+    cbtn.addEventListener('click', function(){
+      var h = '<h2>泛大陆联合学院章程</h2><div class="sub">第七次修订 · 三月一日校务会通过</div>';
+      FANDA.charter.forEach(function(c){
+        h += '<div class="ch">'+c.ch+'</div>';
+        c.arts.forEach(function(a){ h += '<div class="art"><b>'+a[0]+'</b><span>'+a[1]+'</span></div>'; });
+      });
+      openDoc(h, '十章 · 三十六条');
+    });
+  }
+
+  /* 学生名册 */
+  var q  = document.getElementById('rq'),
+      rb = document.getElementById('rb'),
+      rc = document.getElementById('rc');
+  if(q && rb){
+    var render = function(){
+      var k = (q.value || '').trim().toLowerCase();
+      var rows = FANDA.students.filter(function(s){
+        if(!k) return true;
+        return [s.id,s.name,s.dept,s.job,s.race,s.dorm,s.elem].join(' ').toLowerCase().indexOf(k) >= 0;
+      });
+      rb.innerHTML = rows.length ? rows.map(function(s){
+        return '<tr><td class="id">'+s.id+'</td><td class="nm">'+s.name+'</td><td>'+s.race+
+               '</td><td>'+s.grade+'</td><td>'+s.dept+'</td><td>'+s.elem+
+               '</td><td class="rk">'+s.rank+' · '+s.eval+'</td><td>'+s.job+'</td><td>'+s.dorm+'</td></tr>';
+      }).join('') : '<tr><td colspan="9" class="r-empty">没有匹配的记录</td></tr>';
+      rc.textContent = rows.length + ' / ' + FANDA.students.length;
+    };
+    q.addEventListener('input', render);
+    render();
+  }
+})();
+</script>
+
+
+<script>
+/* ===================== 数据 ===================== */
+const IMG = 'images/fanda/scenes/';
+
+const DIR_NAME = {N:'北', E:'东', S:'南', W:'西'};
+const DIR_ORDER = ['N','E','S','W'];
+
+/* 每个场景：views 里每个方位是数组，数组元素 = 一个变体 */
+const SCENES = {
+  s01:{no:'S01', name:'学院全景（黄昏）', desc:'从山脊远眺，四塔楼围住中央教学区，图书馆高窗透光，远处是雾海。',
+       views:{N:[],E:[],S:[{f:'S01_学院全景_01_1216x832.webp', label:'远景 · 悬崖与雾海'}],W:[]}},
+  s01a:{no:'T1', name:'西北塔楼 · 钟塔', desc:'行政塔。塔身上嵌着一面巨大的铜钟面，石阶被几代学生踩得发亮，屋檐下养着送公文的鸽子。签名符号：钟面。',
+        views:{N:[],E:[],S:[
+            {f:'S21_西北塔楼_钟塔_01_832x1216.webp', label:'外观 · 钟面'},
+            {f:'S21_西北塔楼_钟塔_02_1216x832.webp', label:'夜景 · 钟面发光'},
+            {f:'S21_西北塔楼_钟塔_03_1152x1152.webp', label:'特写 · 钟面与蜡印'}
+        ],W:[]},
+        compare:{f:'S25_四塔同框_01_1216x832.webp', label:'四塔同框'}},
+  s01b:{no:'T2', name:'东北塔楼 · 星塔', desc:'贤者塔，安娜斯·千住顶层。塔顶没有房顶，是一圈黄铜栏杆围出来的观星台，悬浮书页绕着浑天仪打转。签名符号：无顶观星台。',
+        views:{N:[],E:[],S:[
+            {f:'S22_东北塔楼_星塔_01_832x1216.webp', label:'外观 · 观星台'},
+            {f:'S22_东北塔楼_星塔_02_1216x832.webp', label:'夜景 · 星轨'},
+            {f:'S22_东北塔楼_星塔_03_1152x1152.webp', label:'特写 · 浑天仪'}
+        ],W:[]}},
+  s01c:{no:'T3', name:'西南塔楼 · 鸦塔', desc:'白板上唯一没标功能的塔，定成半废的旧守望塔：铁栅窗、断雉堞、满墙鸦，只有顶层亮着一盏灯。签名符号：那盏灯。',
+        views:{N:[],E:[],S:[
+            {f:'S23_西南塔楼_鸦塔_01_832x1216.webp', label:'外观 · 鸦群'},
+            {f:'S23_西南塔楼_鸦塔_02_1216x832.webp', label:'夜景 · 顶层一盏灯'},
+            {f:'S23_西南塔楼_鸦塔_03_1152x1152.webp', label:'特写 · 铁栅与鸦羽'}
+        ],W:[]}},
+  s01d:{no:'T4', name:'东南塔楼 · 旗塔', desc:'外务塔。各国使节的旗成排垂在塔下，马车道直通接待门廊，宴会厅的窗整夜亮着。签名符号：旗阵与灯链。',
+        views:{N:[],E:[],S:[
+            {f:'S24_东南塔楼_旗塔_01_832x1216.webp', label:'外观 · 旗阵'},
+            {f:'S24_东南塔楼_旗塔_02_1216x832.webp', label:'夜景 · 宴会灯链'},
+            {f:'S24_东南塔楼_旗塔_03_1152x1152.webp', label:'特写 · 接待台'}
+        ],W:[]}},
+  s01e:{no:'T5', name:'东塔楼 · 灶塔', desc:'宿舍区的热水塔。巨大的铜锅炉铆在外墙上，铁管吐蒸汽，窗间拉满晾衣绳，台阶上常年有只肥猫。签名符号：铜锅炉与蒸汽。',
+        views:{N:[],E:[],S:[
+            {f:'S26_东塔楼_灶塔_01_832x1216.webp', label:'外观 · 铜锅炉'},
+            {f:'S26_东塔楼_灶塔_02_1216x832.webp', label:'夜景 · 炉火与蒸汽'},
+            {f:'S26_东塔楼_灶塔_03_1152x1152.webp', label:'特写 · 压力表与铜阀'}
+        ],W:[]}},
+  s01f:{no:'T6', name:'西塔楼 · 井塔', desc:'宿舍区的取水塔。塔底是水井与木水车，石阶终年湿滑长苔，木桶与绳子挂在井口。西塔抽水、东塔烧水。签名符号：水车与井口。',
+        views:{N:[],E:[],S:[
+            {f:'S27_西塔楼_井塔_01_832x1216.webp', label:'外观 · 水车与井'},
+            {f:'S27_西塔楼_井塔_02_1216x832.webp', label:'雨夜 · 一盏灯'},
+            {f:'S27_西塔楼_井塔_03_1152x1152.webp', label:'特写 · 井口与木桶'}
+        ],W:[]}},
+  s02:{no:'S02', name:'学院正门', desc:'双开铁木大门，门楣刻着校训「以知为刃，以慎为鞘」，门侧石雕与火把。',
+       views:{N:[],E:[],S:[{f:'S02_学院正门_01_1216x832.webp', label:'正面 · 木门与火把'}],W:[]}},
+  s03:{no:'S03', name:'中央教学区（外观）', desc:'环形石构建筑，穹顶开天窗，光柱落在中庭，回廊上浮着半空的笔记。',
+       views:{N:[],E:[],S:[{f:'S03_中央教学区_01_1216x832.webp', label:'中庭 · 穹顶光柱'}],W:[]}},
+  s04:{no:'S04', name:'中央教学区 · 大讲堂', desc:'阶梯式环形讲堂，讲台上悬浮着元素法阵，穹顶刻满符文。',
+       views:{N:[],E:[],S:[{f:'S04_大讲堂_01_1216x832.webp', label:'讲堂 · 穹顶法阵'}],W:[]}},
+  s05:{no:'S05', name:'图书馆 · 外观', desc:'高窗拱窗、外墙爬满藤蔓，顶层的玻璃圆顶就是观星台。三个方向三种天光。',
+       views:{
+         N:[],
+         E:[{f:'S05_图书馆外观_02_832x1216.webp', label:'东 · 铜绿穹顶与石阶'}],
+         S:[{f:'S05_图书馆外观_01_832x1216.webp', label:'南 · 蓝夜玻璃穹顶'}],
+         W:[{f:'S05_图书馆外观_03_832x1216.webp', label:'西 · 黄昏满墙灯火'}]
+       }, compare:{f:'00_总览_图书馆外观.webp', label:'三版对比'}},
+  s06:{no:'S06', name:'图书馆 1F · 公共阅读区', desc:'环形阅览室，高窗采光、长桌围成一圈。这里是灯光与构图的测试场，四个方向各有机位。',
+       views:{
+         N:[{f:'S06_图书馆1F_亮01_1216x832.webp', label:'北 · 亮场'},
+            {f:'S06_图书馆1F_空01_1216x832.webp', label:'北 · 空景'},
+            {f:'S06_图书馆1F_暗01_1216x832.webp', label:'北 · 暗场'}],
+         E:[{f:'S06_图书馆1F_亮02_1216x832.webp', label:'东 · 亮场'},
+            {f:'S06_图书馆1F_空02_1216x832.webp', label:'东 · 空景'},
+            {f:'S06_图书馆1F_暗02_1216x832.webp', label:'东 · 暗场'}],
+         S:[{f:'S06_图书馆1F_暗03_832x1216.webp', label:'南 · 竖构图'},],
+         W:[{f:'S06_图书馆1F_暗04_1216x832.webp', label:'西 · 暗场'},
+            {f:'S06_图书馆1F_空04_1216x832.webp', label:'西 · 空景'}]
+       }, compare:{f:'00_总览_图书馆1F.webp', label:'全部对比'}},
+  s07:{no:'S07', name:'图书馆 7F · 观星台', desc:'玻璃穹顶下巨大的黄铜望远镜，星图投在穹顶内壁上，烛光与月光各占一半。',
+       views:{N:[],E:[],S:[{f:'S07_观星台_01_832x1216.webp', label:'穹顶 · 望远镜与星空'}],W:[]}},
+  s08:{no:'S08', name:'图书馆 −5F · 界欧珀圣物厅', desc:'地下最深处，一块悬浮的虹彩石头，四周是教会守卫与烛环。',
+       views:{N:[],E:[],S:[{f:'S08_圣物厅_01_832x1216.webp', label:'圣物 · 悬浮虹彩石'}],W:[]}},
+  s09:{no:'S09', name:'禁书区（−3F）', desc:'铁栅书架、锁链、地面红色禁制符文，只有一盏提灯。',
+       views:{N:[],E:[],S:[{f:'S09_禁书区_01_1216x832.webp', label:'禁书 · 铁链与红阵'}],W:[]}},
+  s10:{no:'S10', name:'任务厅', desc:'巨型告示板、长柜台、拿着委托单的学生，木与黄铜的暖色。',
+       views:{N:[],E:[],S:[{f:'S10_任务厅_01_1216x832.webp', label:'大厅 · 告示板与长柜台'}],W:[]}},
+  s11:{no:'S11', name:'测试场', desc:'露天圆形竞技场，地面刻满防护法阵，两名学生在里面施法。',
+       views:{N:[],E:[],S:[{f:'S11_测试场_01_1216x832.webp', label:'竞技场 · 雪与法阵'}],W:[]}},
+  s12:{no:'S12', name:'狮鹫棚', desc:'石砌棚舍、栖木、鞍具，狮鹫歇在横梁上。',
+       views:{N:[],E:[],S:[{f:'S12_狮鹫棚_01_1216x832.webp', label:'棚舍 · 鞍具与白羽'}],W:[]}},
+  s13:{no:'S13', name:'食堂', desc:'长条木桌与吊灯，大锅冒着热气，学生端着托盘排队。',
+       views:{N:[],E:[],S:[{f:'S13_食堂_01_1216x689.webp', label:'大厅 · 长桌与吊灯'}],W:[]}},
+  s14:{no:'S14', name:'商业区街道', desc:'石板街、店铺招牌、魔法灯笼，傍晚蓝调时刻。',
+       views:{N:[],E:[],S:[{f:'S14_商业街_01_1216x832.webp', label:'街道 · 傍晚蓝调'}],W:[]}},
+  s15:{no:'S15', name:'星落酒馆', desc:'狐族老板娘的酒馆，木吧台、壁炉、满墙的酒杯。',
+       views:{N:[],E:[],S:[{f:'S15_星落酒馆_01_1216x832.webp', label:'酒馆 · 吧台与壁炉'}],W:[]}},
+  s16:{no:'S16', name:'六区宿舍 · 团队小楼', desc:'三层石木小楼，公共客厅亮着灯，烟囱冒着烟。',
+       views:{N:[],E:[],S:[{f:'S16_六区宿舍_01_832x1216.webp', label:'外观 · 雪夜与亮窗'}],W:[]}},
+  s17:{no:'S17', name:'灰鸦小屋', desc:'学院外围的独立小屋，乌鸦栖在屋顶，只有一扇窗亮着。',
+       views:{
+         N:[],
+         E:[{f:'S17_灰鸦小屋_02_832x1216.webp', label:'东 · 侧看'}],
+         S:[{f:'S17_灰鸦小屋_01_832x1216.webp', label:'南 · 正面'}],
+         W:[]
+       }, compare:{f:'00_总览_灰鸦小屋.webp', label:'两版对比'}},
+  s18:{no:'S18', name:'圣都 · 白石城', desc:'北境白石城，纯白大教堂与朝圣长阶，旗帜与雪。',
+       views:{N:[],E:[],S:[{f:'S18_白石城_01_832x1216.webp', label:'长阶 · 白石大教堂'}],W:[]}},
+  s19:{no:'S19', name:'雾海小城教堂', desc:'小城钟楼、七人影彩窗、木长椅，窗外是浓雾。',
+       views:{N:[],E:[],S:[{f:'S19_雾海小教堂_01_1216x832.webp', label:'内部 · 七人影彩窗'}],W:[]}},
+  s20:{no:'S20', name:'宿舍一区 · 新生双人间', desc:'上下铺、两张书桌、窗外能看见远处的塔尖，暖黄的台灯。',
+       views:{
+         N:[{f:'S20_宿舍双人间_01_832x1216.webp', label:'内景 · 黄昏'}],
+         E:[],S:[],W:[]
+       }},
+  s21:{no:'S21', name:'西北塔楼 · 钟塔', desc:'行政塔，管钱管纪律管时间。塔身嵌着巨大铜钟面，屋檐下养鸽子，石阶被踩得发亮。',
+       views:{N:[],E:[],S:[{f:'S21_西北塔楼_钟塔_01_832x1216.webp', label:'塔身 · 铜钟面'}],W:[]}},
+  s22:{no:'S22', name:'东北塔楼 · 星塔', desc:'贤者塔，塔顶无房顶，一圈黄铜栏杆围出观星台，悬浮书页绕着浑天仪转。',
+       views:{N:[],E:[],S:[{f:'S22_东北塔楼_星塔_01_832x1216.webp', label:'塔顶 · 观星台'}],W:[]}},
+  s23:{no:'S23', name:'西南塔楼 · 鸦塔', desc:'没有标注功能的旧守望塔，断雉堞、铁栅窗、满墙鸦，只有顶层亮着一盏灯。',
+       views:{N:[],E:[],S:[{f:'S23_西南塔楼_鸦塔_01_832x1216.webp', label:'旧塔 · 满墙鸦'}],W:[]}},
+  s24:{no:'S24', name:'东南塔楼 · 旗塔', desc:'外务接待塔，各国使节旗成排垂在塔下，灯链绕塔，马车道直通门廊。',
+       views:{N:[],E:[],S:[{f:'S24_东南塔楼_旗塔_01_832x1216.webp', label:'塔身 · 万国旗'}],W:[]}},
+  s25:{no:'S25', name:'四塔同框', desc:'四角塔的位置关系参考图：西北钟塔、东北星塔、西南鸦塔、东南旗塔，围住中央。',
+       views:{N:[],E:[],S:[{f:'S25_四塔同框_01_1216x832.webp', label:'俯瞰 · 四塔方位'}],W:[]}},
+  s26:{no:'S26', name:'东塔楼 · 灶塔', desc:'宿舍区的厨房塔，铜锅炉铆在外墙上吐蒸汽，窗间拉满晾衣绳，台阶上常躺着一只肥猫。',
+       views:{N:[],E:[],S:[{f:'S26_东塔楼_灶塔_01_832x1216.webp', label:'塔身 · 铜锅炉与晾衣绳'}],W:[]}},
+  s27:{no:'S27', name:'西塔楼 · 井塔', desc:'宿舍区的水塔，塔底一口开井加木水车，雨水槽沿墙往下跑，石阶常年湿滑长苔。',
+       views:{N:[],E:[],S:[{f:'S27_西塔楼_井塔_01_832x1216.webp', label:'塔基 · 井与水车'}],W:[]}},
+  s28:{no:'S28', name:'东西双塔', desc:'两塔隔着宿舍区对望：东边暖、冒蒸汽，西边冷、转水车，中间晾衣绳相连。',
+       views:{N:[],E:[],S:[{f:'S28_东西双塔_01_1216x832.webp', label:'对望 · 灶与井'}],W:[]}}
+};
+
+const BUILDINGS = [
+  {id:'gate',      name:'学院正门',      x:500, y:1120, kind:'gate',   scenes:['s02']},
+  {id:'central',   name:'中央教学区',    x:500, y:610, kind:'hall',   r:100, scenes:['s03','s04','s25']},
+  {id:'library',   name:'图书馆',        x:500, y:880, kind:'book',   scenes:['s05','s06','s07','s08','s09']},
+  {id:'canteen',   name:'食堂',          x:300, y:880, kind:'bowl',   scenes:['s13']},
+  {id:'mission',   name:'任务厅',        x:700, y:908, kind:'board',  scenes:['s10']},
+  {id:'test',      name:'测试场',        x:652, y:1052, kind:'ring',  scenes:['s11']},
+  {id:'griffin',   name:'狮鹫棚',        x:800, y:1020, kind:'wing',  scenes:['s12']},
+  {id:'commercial',name:'商业区',        x:400, y:300, kind:'shop',   scenes:['s14']},
+  {id:'tavern',    name:'星落酒馆',      x:600, y:300, kind:'mug',    scenes:['s15']},
+  {id:'crow',      name:'灰鸦小屋',      x:196, y:960, kind:'crow',   scenes:['s17']},
+  {id:'nw',        name:'西北塔楼',      x:150, y:160, kind:'tower',  scenes:['s21']},
+  {id:'ne',        name:'东北塔楼',      x:850, y:160, kind:'tower',  scenes:['s22']},
+  {id:'sw',        name:'西南塔楼',      x:86,  y:1080, kind:'tower', scenes:['s23']},
+  {id:'se',        name:'东南塔楼',      x:912, y:1090, kind:'tower', scenes:['s24']},
+  {id:'west',      name:'西塔楼',        x:186, y:610, kind:'tower',  scenes:['s27']},
+  {id:'east',      name:'东塔楼',        x:814, y:610, kind:'tower',  scenes:['s26']},
+  {id:'dormW',     name:'西塔楼宿舍区',  x:186, y:730, kind:'dorm',   scenes:['s20','s16','s28']},
+  {id:'dormE',     name:'东塔楼宿舍区',  x:814, y:730, kind:'dorm',   scenes:['s20','s16','s28']},
+  {id:'church',    name:'界欧珀教会',    x:890, y:470, kind:'church', scenes:['s18','s19']},
+];
+
+/* ===================== DS 娘占位 ===================== */
+const DSMOE = `
+<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="mbg" cx="50%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#243a63"/><stop offset="1" stop-color="#0c1222"/>
+    </radialGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a6ee0"/><stop offset="1" stop-color="#25306e"/>
+    </linearGradient>
+    <linearGradient id="hood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fb4ff"/><stop offset="1" stop-color="#6d84e8"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="18" fill="url(#mbg)"/>
+  <circle cx="34" cy="42" r="1.8" fill="#9fd6ff"/><circle cx="206" cy="58" r="2.2" fill="#9fd6ff"/>
+  <circle cx="196" cy="196" r="1.6" fill="#7fe3d4"/><circle cx="44" cy="188" r="2" fill="#7fe3d4"/>
+  <circle cx="170" cy="34" r="1.4" fill="#fff" opacity=".7"/>
+  <ellipse cx="120" cy="112" rx="62" ry="66" fill="url(#hair)"/>
+  <path d="M78 170 Q120 152 162 170 L172 216 Q120 232 68 216 Z" fill="url(#hood)"/>
+  <path d="M100 168 L120 190 L140 168" fill="none" stroke="#4a5cc4" stroke-width="3" stroke-linecap="round"/>
+  <rect x="111" y="146" width="18" height="16" rx="6" fill="#f7d6b8"/>
+  <ellipse cx="120" cy="114" rx="41" ry="43" fill="#ffe4cd"/>
+  <path d="M79 110 Q84 68 120 64 Q156 68 161 110 Q148 90 120 88 Q92 90 79 110 Z" fill="url(#hair)"/>
+  <path d="M79 110 Q76 138 86 154 Q80 122 84 104 Z" fill="url(#hair)"/>
+  <path d="M161 110 Q164 138 154 154 Q160 122 156 104 Z" fill="url(#hair)"/>
+  <ellipse cx="104" cy="118" rx="8.5" ry="11.5" fill="#25306e"/>
+  <ellipse cx="136" cy="118" rx="8.5" ry="11.5" fill="#25306e"/>
+  <circle cx="107" cy="113" r="3.2" fill="#fff"/>
+  <circle cx="139" cy="113" r="3.2" fill="#fff"/>
+  <circle cx="101" cy="123" r="1.6" fill="#9fd6ff"/>
+  <circle cx="133" cy="123" r="1.6" fill="#9fd6ff"/>
+  <ellipse cx="92" cy="134" rx="7" ry="4.6" fill="#ffb3b3" opacity=".55"/>
+  <ellipse cx="148" cy="134" rx="7" ry="4.6" fill="#ffb3b3" opacity=".55"/>
+  <path d="M114 137 Q120 141 126 137" fill="none" stroke="#c9866f" stroke-width="2" stroke-linecap="round"/>
+  <path d="M158 76 q11 -9 19 0 q-6 9 -19 7 Z" fill="#5ee6d6"/>
+  <circle cx="171" cy="79" r="1.4" fill="#0d1626"/>
+  <path d="M163 84 q-6 4 -10 2" fill="none" stroke="#5ee6d6" stroke-width="2" stroke-linecap="round"/>
+  <line x1="196" y1="150" x2="178" y2="186" stroke="#e3b877" stroke-width="5" stroke-linecap="round"/>
+  <path d="M178 186 l-3 10 l11 -6 Z" fill="#f4e2c0"/>
+  <circle cx="60" cy="150" r="6" fill="#ffe4cd"/>
+  <circle cx="180" cy="150" r="6" fill="#ffe4cd"/>
+</svg>`;
+
+/* ===================== 地图渲染 ===================== */
+const mapEl = document.getElementById('sceneMap');
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+function iconPath(kind){
+  switch(kind){
+    case 'gate':   return `<path d="M-16 10 L-16 -2 A16 16 0 0 1 16 -2 L16 10" /><path d="M-10 10 L-10 0 A10 10 0 0 1 10 0 L10 10" />`;
+    case 'hall':   return `<circle r="15"/><path d="M-20 6 A20 14 0 0 1 20 6" /><circle cy="-6" r="4"/>`;
+    case 'book':   return `<path d="M-16 -12 H-2 V12 H-16 Z"/><path d="M2 -12 H16 V12 H2 Z"/><path d="M-2 -12 V12 M2 -12 V12"/>`;
+    case 'bowl':   return `<path d="M-15 0 A15 12 0 0 0 15 0 Z"/><path d="M-10 -6 L10 -6"/><path d="M0 -12 V-6"/>`;
+    case 'board':  return `<rect x="-15" y="-12" width="30" height="20" rx="2"/><path d="M-9 -6 H9 M-9 -1 H9 M-9 4 H4"/><path d="M0 8 V14"/>`;
+    case 'ring':   return `<circle r="15"/><circle r="8"/>`;
+    case 'wing':   return `<path d="M-18 8 Q-18 -10 0 -12 Q18 -10 18 8 Z"/><path d="M-6 -4 Q0 -14 6 -4"/>`;
+    case 'shop':   return `<rect x="-17" y="-10" width="10" height="18" rx="1"/><rect x="-5" y="-10" width="10" height="18" rx="1"/><rect x="7" y="-10" width="10" height="18" rx="1"/>`;
+    case 'mug':    return `<path d="M-9 -8 H7 V8 A6 6 0 0 1 1 14 H-3 A6 6 0 0 1 -9 8 Z"/><path d="M7 -4 A6 6 0 0 1 7 4"/>`;
+    case 'crow':   return `<path d="M-16 2 L0 -14 L16 2"/><rect x="-12" y="2" width="24" height="12" rx="1"/>`;
+    case 'tower':  return `<rect x="-7" y="-6" width="14" height="20" rx="1"/><path d="M-12 -6 L0 -20 L12 -6 Z"/><path d="M0 -20 V-26"/><path d="M0 -26 L6 -23 L0 -21"/>`;
+    case 'dorm':   return `<rect x="-14" y="-2" width="28" height="16" rx="1"/><path d="M-16 -2 L0 -14 L16 -2"/><rect x="-4" y="4" width="8" height="10"/>`;
+    case 'church': return `<rect x="-10" y="-2" width="20" height="16"/><path d="M-14 -2 L0 -18 L14 -2 Z"/><path d="M0 -18 V-28"/><path d="M-5 -24 H5"/>`;
+  }
+  return `<circle r="10"/>`;
+}
+
+BUILDINGS.forEach(b=>{
+  const g = document.createElementNS(SVGNS,'g');
+  g.setAttribute('class','bld');
+  g.dataset.b = b.id;
+  const has = b.scenes.some(s => SCENES[s] && DIR_ORDER.some(d=>SCENES[s].views[d].length));
+  if(has) g.classList.add('has-img');
+  g.innerHTML = `
+    <circle class="hit" cx="${b.x}" cy="${b.y}" r="${b.r? b.r+26 : 46}"/>
+    <g transform="translate(${b.x},${b.y}) scale(1.7)" class="shape">${iconPath(b.kind)}</g>
+    ${has?`<circle class="dot" cx="${b.x}" cy="${b.y-46}" r="3.2"/>`:''}
+    <text class="label" x="${b.x}" y="${b.y + (b.r? b.r+40 : 56)}">${b.name}</text>`;
+  g.addEventListener('click', ()=> selectBuilding(b));
+  mapEl.appendChild(g);
+});
+
+/* ===================== 交互 ===================== */
+let cur = {bid:null, sid:null, dir:'S', idx:0};
+
+const el = {
+  badge: document.getElementById('badge'),
+  title: document.getElementById('title'),
+  desc: document.getElementById('desc'),
+  photo: document.getElementById('photo'),
+  empty: document.getElementById('empty'),
+  emptyName: document.getElementById('emptyName'),
+  caption: document.getElementById('caption'),
+  thumbs: document.getElementById('thumbs'),
+  tabs: document.getElementById('tabs'),
+  stat: document.getElementById('stat'),
+  count: document.getElementById('count'),
+  dsmoe: document.getElementById('dsmoe'),
+};
+el.dsmoe.innerHTML = DSMOE;
+
+function sceneHasImage(sid){
+  return SCENES[sid] && DIR_ORDER.some(d=>SCENES[sid].views[d].length);
+}
+function refreshStat(){
+  const n = Object.keys(SCENES).filter(sceneHasImage).length;
+  el.stat.textContent = `已出图 ${n} 处 · 共 ${Object.keys(SCENES).length} 个场景`;
+}
+refreshStat();
+
+/* 预检：把文件不存在的变体从数据里剔除，统计才准 */
+function preflight(){
+  const files = new Set();
+  Object.values(SCENES).forEach(sc=>{
+    DIR_ORDER.forEach(d=>(sc.views[d]||[]).forEach(it=>files.add(it.f)));
+    if(sc.compare) files.add(sc.compare.f);
+  });
+  const bad = new Set();
+  return Promise.all([...files].map(f=>new Promise(res=>{
+    const im = new Image();
+    im.onload = ()=>res();
+    im.onerror = ()=>{ bad.add(f); res(); };
+    im.src = IMG + f;
+  }))).then(()=>{
+    Object.values(SCENES).forEach(sc=>{
+      DIR_ORDER.forEach(d=>{
+        if(sc.views[d]) sc.views[d] = sc.views[d].filter(it=>!bad.has(it.f));
+      });
+      if(sc.compare && bad.has(sc.compare.f)) delete sc.compare;
+    });
+    if(bad.size) console.log('缺图（已自动降级为占位）：', [...bad].join(', '));
+    refreshStat();
+  });
+}
+
+function selectBuilding(b){
+  cur.bid = b.id;
+  document.querySelectorAll('.bld').forEach(g=>g.classList.toggle('active', g.dataset.b===b.id));
+  renderTabs(b);
+  // 选第一个有图的子场景，没有就选第一个
+  const first = b.scenes.find(s=>sceneHasImage(s)) || b.scenes[0];
+  setScene(first);
+}
+
+function renderTabs(b){
+  el.tabs.innerHTML = '';
+  if(b.scenes.length < 2) return;
+  b.scenes.forEach(sid=>{
+    const t = document.createElement('button');
+    t.className = 'tab';
+    t.textContent = SCENES[sid].no + ' ' + SCENES[sid].name.replace(/^.*?·\s*/,'');
+    t.dataset.sid = sid;
+    if(sid === cur.sid) t.classList.add('on');
+    t.addEventListener('click', ()=> setScene(sid));
+    el.tabs.appendChild(t);
+  });
+}
+
+function firstDirWithImage(sid){
+  return DIR_ORDER.find(d=>SCENES[sid].views[d].length) || 'S';
+}
+
+function setScene(sid){
+  cur.sid = sid;
+  const sc = SCENES[sid];
+  el.badge.textContent = sc.no;
+  el.title.textContent = sc.name;
+  el.desc.textContent = sc.desc;
+  el.emptyName.textContent = sc.name;
+  // tabs 高亮
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.sid===sid));
+  if(!cur.dir || !sc.views[cur.dir] || sc.views[cur.dir].length===0){
+    cur.dir = firstDirWithImage(sid);
+  }
+  cur.idx = 0;
+  render();
+}
+
+function setDir(d){
+  const sc = SCENES[cur.sid];
+  cur.dir = d;
+  cur.idx = 0;
+  render();
+}
+
+function render(){
+  const sc = SCENES[cur.sid];
+  const list = sc.views[cur.dir] || [];
+  // 方位按钮状态
+  document.querySelectorAll('.dir').forEach(btn=>{
+    const d = btn.dataset.dir;
+    btn.classList.toggle('on', d === cur.dir);
+    btn.classList.toggle('empty', (sc.views[d]||[]).length === 0);
+  });
+  // 图片 / 占位
+  if(list.length){
+    const item = list[Math.min(cur.idx, list.length-1)];
+    el.photo.src = IMG + item.f;
+    el.photo.style.display = 'block';
+    el.empty.style.display = 'none';
+    el.caption.innerHTML = `<em>${DIR_NAME[cur.dir]}</em> · ${item.label}`;
+  } else {
+    el.photo.style.display = 'none';
+    el.empty.style.display = 'flex';
+    el.caption.innerHTML = `<em>${DIR_NAME[cur.dir]}</em> · 暂无素材`;
+  }
+  // 缩略图
+  el.thumbs.innerHTML = '';
+  const all = [];
+  DIR_ORDER.forEach(d => (sc.views[d]||[]).forEach((it,i)=> all.push({d, i, ...it})));
+  if(sc.compare) all.push({d:null, i:-1, ...sc.compare, isCompare:true});
+
+  all.forEach(it=>{
+    const div = document.createElement('div');
+    div.className = 'thumb';
+    if(!it.isCompare && it.d === cur.dir && it.i === cur.idx) div.classList.add('on');
+    if(it.isCompare){
+      div.innerHTML = `<img src="${IMG + it.f}" alt=""><div class="t">${it.label}</div>`;
+    } else {
+      div.innerHTML = `<img src="${IMG + it.f}" alt=""><div class="t">${DIR_NAME[it.d]} · ${it.label}</div>`;
+    }
+    div.addEventListener('click', ()=>{
+      if(it.isCompare){ showCompare(it.f, it.label); return; }
+      cur.dir = it.d; cur.idx = it.i; render();
+    });
+    el.thumbs.appendChild(div);
+  });
+  el.count.textContent = `${sc.no} · ${DIR_NAME[cur.dir]} · ${list.length ? (Math.min(cur.idx,list.length-1)+1)+'/'+list.length : '0/0'}`;
+}
+
+function showCompare(f, label){
+  el.photo.src = IMG + f;
+  el.photo.style.display = 'block';
+  el.empty.style.display = 'none';
+  el.caption.innerHTML = `<em>对比</em> · ${label}`;
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('on'));
+}
+
+/* 方位按钮 */
+document.querySelectorAll('.dir').forEach(btn=>{
+  btn.addEventListener('click', ()=> setDir(btn.dataset.dir));
+});
+
+/* 键盘 */
+document.addEventListener('keydown', e=>{
+  if(!cur.sid) return;
+  const sc = SCENES[cur.sid];
+  const map = {ArrowUp:'N', ArrowDown:'S', ArrowLeft:'W', ArrowRight:'E'};
+  if(map[e.key]){ setDir(map[e.key]); e.preventDefault(); return; }
+  if(e.key === 'Escape'){
+    cur.bid=null; document.querySelectorAll('.bld').forEach(g=>g.classList.remove('active'));
+    return;
+  }
+  if(/^[1-9]$/.test(e.key)){
+    const list = sc.views[cur.dir]||[];
+    const i = parseInt(e.key)-1;
+    if(i < list.length){ cur.idx = i; render(); }
+  }
+});
+
+/* 图片 404 兜底 */
+el.photo.addEventListener('error', ()=>{
+  el.photo.style.display='none'; el.empty.style.display='flex';
+  el.caption.innerHTML = `<em>${DIR_NAME[cur.dir]}</em> · 文件缺失`;
+});
+
+/* 初始：支持 #s06 这样的锚点直达（等图片预检完成再渲染） */
+function boot(){
+  const initSid = location.hash.replace('#','').toLowerCase();
+  const initB = BUILDINGS.find(b=>b.scenes.includes(initSid));
+  if(initB){
+    selectBuilding(initB);
+    if(SCENES[initSid]) setScene(initSid);
+  }else{
+    selectBuilding(BUILDINGS.find(b=>b.id==='gate'));
+  }
+}
+preflight().then(boot);
+
+window.addEventListener('hashchange', ()=>{
+  const sid = location.hash.replace('#','').toLowerCase();
+  const b = BUILDINGS.find(x=>x.scenes.includes(sid));
+  if(b){ selectBuilding(b); if(SCENES[sid]) setScene(sid); }
+});
+</script>
+<script>
+(function () {
+  var USER = 'ANSE';
+  var PASS = 'FANDAaygy';
+  var card = document.getElementById('vaultCard');
+  if (!card) return;
+  var u = document.getElementById('vUser');
+  var p = document.getElementById('vPass');
+  var go = document.getElementById('vGo');
+  var msg = document.getElementById('vMsg');
+  var list = document.getElementById('vaultList');
+  var lb = document.getElementById('lb');
+  var lbdoc = document.getElementById('lbdoc');
+  var lbcap = document.getElementById('lbcap');
+  var lbimg = document.getElementById('lbimg');
+
+  function openArch(pg, label) {
+    if (!lb || !lbdoc) return;
+    lb.setAttribute('tabindex', '-1');
+    lbdoc.innerHTML = '';
+    lbdoc.appendChild(pg.cloneNode(true));
+    if (lbimg) lbimg.removeAttribute('src');
+    if (lbcap) lbcap.textContent = label;
+    lb.classList.add('on');
+    lb.classList.add('doc-mode');
+    document.documentElement.style.overflow = 'hidden';
+    lb.scrollTop = 0;
+    setTimeout(function () { lb.focus(); }, 30);
+  }
+
+  function buildList() {
+    if (!list || list.getAttribute('data-on') === '1') return;
+    var pages = document.querySelectorAll('.print-secret .ps-page');
+    Array.prototype.forEach.call(pages, function (pg) {
+      var h = pg.querySelector('h1');
+      var no = h ? h.textContent.replace(/\s+/g, '') : '编号';
+      var lead = pg.querySelector('.ps-lead');
+      var obj = lead ? lead.textContent.replace(/^\s*对象[：:]\s*/, '').trim() : '';
+      var meta = pg.querySelector('.ps-meta');
+      var m = meta ? meta.textContent.replace(/\s+/g, ' ').trim() : '';
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'arch';
+      var s1 = document.createElement('span');
+      s1.className = 'arch-no';
+      s1.textContent = no.replace(/^编号/, 'NO.');
+      var s2 = document.createElement('span');
+      s2.className = 'arch-obj';
+      s2.textContent = obj;
+      var s3 = document.createElement('span');
+      s3.className = 'arch-meta';
+      s3.textContent = m;
+      b.appendChild(s1);
+      b.appendChild(s2);
+      b.appendChild(s3);
+      b.addEventListener('click', function () {
+        openArch(pg, no.replace(/^编号/, 'NO.'));
+      });
+      list.appendChild(b);
+    });
+    list.setAttribute('data-on', '1');
+  }
+
+  function unlock() {
+    document.body.classList.add('vault-open');
+    card.classList.add('done');
+    try { localStorage.setItem('fanda.vault', '1'); } catch (e) {}
+    buildList();
+    var sec = document.getElementById('vault');
+    if (sec) {
+      var head = sec.querySelector('.sec-head span');
+      if (head) head.textContent = '已登录 · 共六份 · 点开读 · Ctrl+P 打印全份';
+    }
+  }
+
+  function fail() {
+    card.classList.add('bad');
+    setTimeout(function () { card.classList.remove('bad'); }, 440);
+    msg.textContent = '账号或口令不对。';
+    msg.className = 'vault-msg err';
+    p.value = '';
+    p.focus();
+  }
+
+  function attempt() {
+    var uk = (u.value || '').trim();
+    var pk = p.value || '';
+    if (uk === USER && pk === PASS) {
+      msg.textContent = '';
+      msg.className = 'vault-msg';
+      unlock();
+    } else {
+      fail();
+    }
+  }
+
+  var remembered = false;
+  try { remembered = localStorage.getItem('fanda.vault') === '1'; } catch (e) {}
+  if (remembered) unlock();
+
+  go.addEventListener('click', attempt);
+  [u, p].forEach(function (el) {
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); attempt(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
